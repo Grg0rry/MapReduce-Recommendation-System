@@ -93,7 +93,7 @@ Netflix Kaggle Competition Page [[Click Here](https://www.kaggle.com/datasets/ne
 |   `-- cleaned_moviesTitles.csv
 ```
 
-Info on `cleaned_moviesTitles.csv` and the number of missing values in each column. 
+Info on `cleaned_moviesTitles.csv`. 
 ```
 <class 'pandas.core.frame.DataFrame'>
 RangeIndex: 100480507 entries, 0 to 100480506
@@ -109,7 +109,10 @@ Data columns (total 6 columns):
 dtypes: float64(1), int64(3), object(2)
 memory usage: 4.5+ GB
 ```
+
+A simple descriptive analysis on `cleaned_moviesTitles.csv`
 ```
+# The number of missing values
 >>> df.isnull().sum()
 UserID           0
 Rating           0
@@ -118,10 +121,7 @@ MovieID          0
 ReleaseYear    965
 MovieTitle       0
 dtype: int64
-```
 
-A simple descriptive analysis on `cleaned_moviesTitles.csv`
-```
 # The number of Users
 >>> df['UserID'].nunique()
 480189
