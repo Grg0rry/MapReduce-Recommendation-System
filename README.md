@@ -2,7 +2,7 @@
 A recommendation system built on top of Hadoop Distributed File System and MapReduce
 
 ## Background
-The whole system will be running on AWS EC2 instance with the SunU-Hadoop-Image v1.3 AMI. In addition, the system has been configured with 1 master node and 3 slave nodes, all of which uses the t2.small instance type. 
+The whole system will be running on AWS EC2 instance with the SunU-Hadoop-Image v1.3 AMI. In addition, the system has been configured with 1 master node and 3 slave nodes, all of which uses the t2.large instance type. 
 
 ## File Structure
 Below is the structure used in organising files in both the HDFS and Local Linux Directory.
