@@ -11,11 +11,11 @@ fi
 start=$(date +%s)
 
 python3 ./src/py_mrjob/DataDividedByMovie.py \
--r hadoop hdfs:///user/hadoop/netflix_data/cleaned_movies.csv \
+-r hadoop hdfs:///user/hadoop/netflix_data/cleaned_moviesTitles.csv \
 --output hdfs:///user/hadoop/results/py_mrjob/job1
 
 python3 ./src/py_mrjob/UserList.py \
--r hadoop hdfs:///user/hadoop/netflix_data/cleaned_movies.csv \
+-r hadoop hdfs:///user/hadoop/netflix_data/cleaned_moviesTitles.csv \
 --output hdfs:///user/hadoop/results/py_mrjob/job2
 
 python3 ./src/py_mrjob/.py \
