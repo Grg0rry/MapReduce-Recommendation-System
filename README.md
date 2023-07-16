@@ -79,7 +79,7 @@ user/hadoop
 ```
 
 ## Data
-Data Repository [[Download](https://netflix-big-data-assignment.s3.amazonaws.com/Datafiles.zip)],
+Data Repository [[Download](https://netflix-big-data-assignment.s3.amazonaws.com/datafiles.zip)],
 Netflix Kaggle Competition Page [[Click Here](https://www.kaggle.com/datasets/netflix-inc/netflix-prize-data)]
 ```
 |-- data
