@@ -4,6 +4,9 @@ A recommendation system built on top of Hadoop Distributed File System and MapRe
 ## Background
 The whole system will be running on AWS EC2 instance with the SunU-Hadoop-Image v1.3 AMI. In addition, the system has been configured with 1 master node and 3 slave nodes, all of which uses the t2.large instance type. 
 
+Note:
+Because of the file structure and format of the combined_data_*.txt file, preprocessing the data couldn't be done using the MapReduce method. Therefore the bash script `preprocessing.sh` had to be performed locally on one of the instances (t2.xlarge) with the EBS volume size set to at least (20 GiB). The output of the script is the `cleaned_moviesTitles.csv` file which can be used for MapReduce processing.
+
 ## File Structure
 Below is the structure used in organising files in both the HDFS and Local Linux Directory.
 
