@@ -4,10 +4,11 @@ from mrjob.job import MRJob
 class UserList(MRJob):
 
     def mapper(self, _, line):
-        User_Movie_Rating = line.split(",")
+        MovieRating = line.split(",", 5)
 
-        UserID = int(User_Movie_Rating[0])
+        UserID = int(MovieRating[0])
         yield(UserID, "")
+
 
     def reducer(self, UserID, _):
         user_list = []

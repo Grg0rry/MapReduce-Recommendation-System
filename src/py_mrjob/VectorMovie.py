@@ -9,7 +9,7 @@ class VectorMovie(MRJob):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.last_MovieID = None
+        self.last_Movie = None
         self.UserList = []
 
     def mapper_init(self):
@@ -19,7 +19,7 @@ class VectorMovie(MRJob):
     def mapper(self, _, line):
         Vector = []
 
-        MovieID, UserRating_list = line.split(",", 1)
+        Movie, UserRating_list = line.split(",", 1)
         UserRating_list = eval(UserRating_list)
         
         for Search_UserID in self.UserList:
@@ -36,19 +36,19 @@ class VectorMovie(MRJob):
             if not found_match:
                 Vector.append(0)
 
-        yield(MovieID, Vector)
+        yield(Movie, Vector)
 
 
-    def reducer(self, MovieID, Vector):
-        if self.last_MovieID is not None:
-            last_MovieID, last_Vector = self.last_MovieID
+    def reducer(self, Movie, Vector):
+        if self.last_Movie is not None:
+            last_Movie, last_Vector = self.last_Movie
 
             dot_product = sum(x * y for x, y in zip(Vector, last_Vector))
             magnitude = (sum(x ** 2 for x in Vector) ** 0.5) * (sum(x ** 2 for x in last_Vector) ** 0.5)
 
-            yield((MovieID, last_MovieID), dot_product/magnitude)
+            yield((Movie, last_Movie), dot_product/magnitude)
 
-        self.last_MovieID = (MovieID, Vector)
+        self.last_Movie = (Movie, Vector)
 
     
     def steps(self):

@@ -4,15 +4,15 @@ from mrjob.job import MRJob
 class DataDividedByMovie(MRJob):      
 
     def mapper(self, _, line):
-        User_Movie_Rating = line.split(",")
+        MovieRating = line.split(",", 5)
 
-        UserID = int(User_Movie_Rating[0])
-        MovieID = User_Movie_Rating[1]
-        Rating = int(User_Movie_Rating[2])
-        yield(MovieID, f'{UserID}:{Rating}')
+        UserID = int(MovieRating[0])
+        MovieTitle = MovieRating[5]
+        Rating = int(MovieRating[1])
+        yield(MovieTitle, f'{UserID}:{Rating}')
 
-    def reducer(self, MovieID, UserRating):
-        yield(MovieID, list(UserRating))
+    def reducer(self, MovieTitle, UserRating):
+        yield(MovieTitle, list(UserRating))
 
 if __name__ == '__main__':
     DataDividedByMovie.run()
