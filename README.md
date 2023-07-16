@@ -57,7 +57,12 @@ home/hadoop/workspace
 |           |-- mapper.java
 |           |-- reducer.java
 |           `-- driver.java
-|-- script
+|-- preprocessing
+|   |-- ratingsPreprocessing.py
+|   |-- titlesPreprocessing.py
+|   `-- combineMovieTitles.py
+`-- script
+    |-- preprocessing.sh
     |-- local_mapreduce.sh
     |-- py_mapred.sh
     |-- py_mrjob.sh
