@@ -7,19 +7,18 @@ class UserList(MRJob):
         MovieRating = line.split(",", 5)
 
         UserID = int(MovieRating[0])
-        yield(UserID, "")
+        yield("", UserID)
 
 
-    def reducer(self, UserID, values):
+    def reducer(self, _, UserID):
         UserList = []
         last_UserID = ""
 
         if UserID != last_UserID:
             UserList.append(UserID)
         last_UserID = UserID
-
-        if len(values) == 1:
-            yield(None, UserList)
+        
+        yield(None, UserList)
 
 
 if __name__ == '__main__':
