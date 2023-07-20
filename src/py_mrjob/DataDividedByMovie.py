@@ -1,5 +1,7 @@
-from mrjob.job import MRJob
+#!/usr/bin/python
+# -*-coding:utf-8 -*
 
+from mrjob.job import MRJob
 
 class DataDividedByMovie(MRJob):      
 

@@ -18,11 +18,13 @@ hadoop fs -rm -r results/py_mrjob/job3 || true
 start=$(date +%s)
 
 python3 ./src/py_mrjob/DataDividedByMovie.py \
--r hadoop hdfs:///user/hadoop/netflix_data/cleaned_moviesTitles.csv \
+#-r hadoop hdfs:///user/hadoop/netflix_data/cleaned_moviesTitles.csv \
+-r hadoop hdfs:///user/hadoop/sample_movies/part-m-00000 \
 --output hdfs:///user/hadoop/results/py_mrjob/job1
 
 python3 ./src/py_mrjob/UserList.py \
--r hadoop hdfs:///user/hadoop/netflix_data/cleaned_moviesTitles.csv \
+# -r hadoop hdfs:///user/hadoop/netflix_data/cleaned_moviesTitles.csv \
+-r hadoop hdfs:///user/hadoop/sample_movies/part-m-00000 \
 --output hdfs:///user/hadoop/results/py_mrjob/job2
 
 python3 ./src/py_mrjob/.py \

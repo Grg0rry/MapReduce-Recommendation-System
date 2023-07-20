@@ -1,5 +1,7 @@
-from mrjob.job import MRJob, MRStep
+#!/usr/bin/python
+# -*-coding:utf-8 -*
 
+from mrjob.job import MRJob, MRStep
 
 class VectorMovie(MRJob):
 
