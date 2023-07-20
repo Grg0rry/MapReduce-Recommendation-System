@@ -9,9 +9,9 @@ fi
 
 
 # remove output if already exist
-hadoop fs -rm -r results/py_mrjob/job1
-hadoop fs -rm -r results/py_mrjob/job2
-hadoop fs -rm -r results/py_mrjob/job3
+hadoop fs -rm -r results/py_mrjob/job1 || true
+hadoop fs -rm -r results/py_mrjob/job2 || true
+hadoop fs -rm -r results/py_mrjob/job3 || true
 
 
 # continue
