@@ -1,10 +1,10 @@
 #!/bin/bash
+set -e
 
 # check hdfs connection
 hadoop fs -ls /
 if [[ $? -ne 0 ]]; then
     echo "HDFS connection failed. Exiting..."
-    return 
 fi
 
 
