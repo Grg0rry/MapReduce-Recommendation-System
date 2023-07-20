@@ -7,6 +7,13 @@ if [[ $? -ne 0 ]]; then
     return 
 fi
 
+
+# remove output if already exist
+hadoop fs -rm -r results/py_mrjob/job1
+hadoop fs -rm -r results/py_mrjob/job2
+hadoop fs -rm -r results/py_mrjob/job3
+
+
 # continue
 start=$(date +%s)
 

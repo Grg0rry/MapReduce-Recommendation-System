@@ -14,7 +14,7 @@ class VectorMovie(MRJob):
 
     def mapper_init(self):
         with open(self.options.addition_input, 'r') as f:
-            self.UserList = list(eval(f.read))
+            self.UserList = list(eval(f.read().split(",")[1]))
 
     def mapper(self, _, line):
         Vector = []
