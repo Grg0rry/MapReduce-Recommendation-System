@@ -13,19 +13,10 @@ for line in sys.stdin:
         temp_UserList.append(line[1])
     else:
         UserID, Rating = line[1].split(':')
-        MovieTitle, UserRating = MovieRating.get(MovieTitle, ([],))
-        MovieRating[MovieTitle].append((UserID, Rating))
-
-# process both mappers
-for line in sys.stdin:
-    line = line.strip().split('\t', 1)
-
-    if line[0].startswith("_$UserList"):
-        temp_UserList.append(line[1])
-    else:
-        UserID, Rating = line[1].split(':')
-        MovieTitle, UserRating = MovieRating.get(MovieTitle, ([],))
-        MovieRating[MovieTitle].append((UserID, Rating))
+        MovieTitle = line[0]
+        UserRating = MovieRating.get(MovieTitle, [])
+        UserRating.append((UserID, Rating))
+        MovieRating[MovieTitle] = UserRating
 
 # compiles to a vector
 UserList = list(sorted(set(temp_UserList)))
