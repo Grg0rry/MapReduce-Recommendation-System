@@ -7,6 +7,11 @@ if [[ $? -ne 0 ]]; then
     echo "HDFS connection failed. Exiting..."
 fi
 
+# check if in directory
+directory = "/home/hadoop/recommendation-system/src/py_mapred"
+if [[ $(pwd) != directory ]]; then
+    echo "Please switch directory to $directory"
+fi
 
 # remove output if already exist
 hadoop fs -rm -r results/py_mapred/job1 || true
@@ -14,19 +19,15 @@ hadoop fs -rm -r results/py_mapred/job2 || true
 hadoop fs -rm -r results/py_mapred/job3 || true
 hadoop fs -rm -r results/py_mapred/job4 || true
 
-
-# continue
+# start timer
 start=$(date +%s)
 
-#-input netflix_data/sample_movies \
+# execute mapreduce -- sample_movies.csv
 mapred streaming \
--files ./src/py_mapred/DataDividedByMovie_Mapper.py,./src/py_mapred/DataDividedByMovie_Reducer.py \
--input netflix_data/sample_movies.csv \
--output results/py_mapred/job1 \
--mapper "python3 ./src/py_mapred/DataDividedByMovie_Mapper.py" \
--reducer "python3 ./src/py_mapred/DataDividedByMovie_Reducer.py"
-
+-files DataDividedByMovie_Mapper.py \
 -input netflix_data/cleaned_moviesTitles.csv \
+-output results/py_mapred/job1 \
+-mapper "python3 DataDividedByMovie_Mapper.py"
 
 mapred streaming \
 -files ./src/py_mapred/UserList_Mapper.py \
@@ -46,6 +47,7 @@ mapred streaming \
 -output results/py_mapred/job4 \
 -reducer "python3 ./src/py_mapred/CosineSimilarity_Reducer.py"
 
+# calculate time
 end=$(date +%s)
 total_time=$((end - start))
 echo "Total time taken: $total_time seconds" 
