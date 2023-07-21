@@ -3,7 +3,7 @@
 import sys
 import ast
 
-last_Tuple = None
+Movie_Vector = {}
 
 for line in sys.stdin:
     line = line.strip().split('\t', 1)
@@ -11,12 +11,11 @@ for line in sys.stdin:
     MovieTitle = line[0]
     vectors = [int(item) for item in ast.literal_eval(line[1])]
 
-    if last_Tuple != None:
-        last_Movie, last_Vector = last_Tuple
+    Movie_Vector[MovieTitle] = vectors
 
-        dot_product = sum(x * y for x, y in zip(vectors, last_Vector))
-        magnitude = (sum(x ** 2 for x in vectors) ** 0.5) * (sum(x ** 2 for x in last_Vector) ** 0.5)
 
-        print('%s\t%s' % ((MovieTitle, last_Movie), dot_product/magnitude))
-
-    last_Tuple = (MovieTitle, vectors)
+for MovieTitle, Vector in Movie_Vector.items():
+    for Next_MovieTitle, Next_Vector in Movie_Vector.items():
+        dot_product = sum(x * y for x, y in zip(Vector, Next_Vector))
+        magnitude = (sum(x ** 2 for x in Vector) ** 0.5) * (sum(x ** 2 for x in Next_Vector) ** 0.5)
+        print('%s\t%s' % ((MovieTitle, Next_MovieTitle), dot_product/magnitude))
