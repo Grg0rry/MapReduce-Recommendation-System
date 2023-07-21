@@ -17,11 +17,27 @@ start=$(date +%s)
 
 # -input netflix_data/cleaned_moviesTitles.csv \
 mapred streaming \
--files ./src/py_mapred/DataDividedByMovie_Mapper.py,./src/py_mapred/UserList_Mapper.py,./src/py_mapred/MoviesVector_Reducer.py \
--input sample_movies.csv \
--output results/py_mapred/job \
--mapper "python3 ./src/py_mapred/DataDividedByMovie_Mapper.py" \
--mapper "python3 ./src/py_mapred/UserList_Mapper.py" \
+-files ./src/py_mapred/DataDividedByMovie_Mapper.py \
+-input netflix_data/sample_movies.csv \
+-output results/py_mapred/job1 \
+-mapper "python3 ./src/py_mapred/DataDividedByMovie_Mapper.py"
+
+mapred streaming \
+-files ./src/py_mapred/UserList_Mapper.py \
+-input netflix_data/sample_movies.csv \
+-output results/py_mapred/job2 \
+-mapper "python3 ./src/py_mapred/UserList_Mapper.py"
+
+mapred streaming \
+-files ./src/py_mapred/MoviesVector_Reducer.py \
+-input hdfs:///user/hadoop/results/py_mapred/job1/part*,hdfs:///user/hadoop/results/py_mapred/job2/part* \
+-output results/py_mapred/job3 \
+-reducer "python3 ./src/py_mapred/MoviesVector_Reducer.py"
+
+mapred streaming \
+-files ./src/py_mapred/MoviesVector_Reducer.py \
+-input hdfs:///user/hadoop/results/py_mapred/job3/part* \
+-output results/py_mapred/job4 \
 -reducer "python3 ./src/py_mapred/MoviesVector_Reducer.py"
 
 end=$(date +%s)
