@@ -31,22 +31,22 @@ mapred streaming \
 -mapper "python3 DataDividedByMovie_Mapper.py"
 
 mapred streaming \
--files ./src/py_mapred/UserList_Mapper.py \
+-files UserList_Mapper.py \
 -input netflix_data/cleaned_moviesTitles.csv \
 -output results/py_mapred/job2 \
--mapper "python3 ./src/py_mapred/UserList_Mapper.py"
+-mapper "python3 UserList_Mapper.py"
 
 mapred streaming \
--files ./src/py_mapred/MoviesVector_Reducer.py \
--input hdfs:///user/hadoop/results/py_mapred/job1/part*,hdfs:///user/hadoop/results/py_mapred/job2/part* \
+-files MoviesVector_Reducer.py \
+-input hdfs:///user/hadoop/results/py_mapred/job1/part-00000,hdfs:///user/hadoop/results/py_mapred/job2/part-00000 \
 -output results/py_mapred/job3 \
--reducer "python3 ./src/py_mapred/MoviesVector_Reducer.py"
+-reducer "python3 MoviesVector_Reducer.py"
 
 mapred streaming \
--files ./src/py_mapred/CosineSimilarity_Reducer.py \
--input hdfs:///user/hadoop/results/py_mapred/job3/part* \
+-files CosineSimilarity_Reducer.py \
+-input hdfs:///user/hadoop/results/py_mapred/job3/part-00000 \
 -output results/py_mapred/job4 \
--reducer "python3 ./src/py_mapred/CosineSimilarity_Reducer.py"
+-reducer "python3 CosineSimilarity_Reducer.py"
 
 # calculate time
 end=$(date +%s)
