@@ -26,4 +26,4 @@ mapred streaming \
 
 end=$(date +%s)
 total_time=$((end - start))
-echo "Total time taken: $total_time seconds"
+echo "Total time taken: $total_time seconds" 
