@@ -9,7 +9,10 @@ fi
 
 
 # remove output if already exist
-hadoop fs -rm -r results/py_mapred/job || true
+hadoop fs -rm -r results/py_mapred/job1 || true
+hadoop fs -rm -r results/py_mapred/job2 || true
+hadoop fs -rm -r results/py_mapred/job3 || true
+hadoop fs -rm -r results/py_mapred/job4 || true
 
 
 # continue
