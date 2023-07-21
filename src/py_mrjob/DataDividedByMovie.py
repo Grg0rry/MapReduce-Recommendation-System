@@ -11,7 +11,7 @@ class DataDividedByMovie(MRJob):
         UserID = int(MovieRating[0])
         MovieTitle = MovieRating[5]
         Rating = int(MovieRating[1])
-        yield(MovieTitle, f'{UserID}={Rating}')
+        yield(MovieTitle, f'{UserID}:{Rating}')
 
     def reducer(self, MovieTitle, UserRating):
         yield(MovieTitle, list(UserRating))

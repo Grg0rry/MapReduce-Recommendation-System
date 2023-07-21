@@ -4,7 +4,7 @@ import sys
 import tqdm
 
 for line in tqdm.tqdm(sys.stdin):
-    line = line.strip().split("\t", 5)
+    line = line.strip().split(",", 5)
 
     UserID = int(line[0])
 
