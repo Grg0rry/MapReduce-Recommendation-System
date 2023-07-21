@@ -2,13 +2,12 @@
 
 from operator import itemgetter
 import sys
-import tqdm
 
 UserList = []
 MovieRating = {}
 
 # process both mappers
-for line in tqdm.tqdm(sys.stdin):
+for line in sys.stdin:
     line = line.strip().split('\t', 1)
 
     if line[0].startswith("_$UserList"):
