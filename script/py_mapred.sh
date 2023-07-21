@@ -8,9 +8,10 @@ if [[ $? -ne 0 ]]; then
 fi
 
 # check if in directory
-directory = "/home/hadoop/recommendation-system/src/py_mapred"
+directory="/home/hadoop/recommendation-system/src/py_mapred"
 if [[ $(pwd) != directory ]]; then
-    echo "Please switch directory to $directory"
+    cd "/home/hadoop/recommendation-system/src/py_mapred"    
+    echo "Switch directory to $directory"
 fi
 
 # remove output if already exist
