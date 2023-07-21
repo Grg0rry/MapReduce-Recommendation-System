@@ -20,10 +20,13 @@ start=$(date +%s)
 
 #-input netflix_data/sample_movies \
 mapred streaming \
--files ./src/py_mapred/DataDividedByMovie_Mapper.py \
--input netflix_data/cleaned_moviesTitles.csv \
+-files ./src/py_mapred/DataDividedByMovie_Mapper.py,./src/py_mapred/DataDividedByMovie_Reducer.py \
+-input netflix_data/sample_movies.csv \
 -output results/py_mapred/job1 \
--mapper "python3 ./src/py_mapred/DataDividedByMovie_Mapper.py"
+-mapper "python3 ./src/py_mapred/DataDividedByMovie_Mapper.py" \
+-reducer "python3 ./src/py_mapred/DataDividedByMovie_Reducer.py"
+
+-input netflix_data/cleaned_moviesTitles.csv \
 
 mapred streaming \
 -files ./src/py_mapred/UserList_Mapper.py \
