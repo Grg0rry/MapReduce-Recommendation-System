@@ -5,6 +5,10 @@ from mrjob.job import MRJob, MRStep
 
 class VectorMovie(MRJob):
 
+    def UserList_mapper(self, _, line):
+        if 
+
+
     def configure_args(self):
         super(VectorMovie, self).configure_args()
         self.add_file_arg('--addition_input', help='Path of the UserList Job')
