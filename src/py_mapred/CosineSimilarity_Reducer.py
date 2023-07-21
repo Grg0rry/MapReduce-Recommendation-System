@@ -17,6 +17,6 @@ for line in sys.stdin:
         dot_product = sum(x * y for x, y in zip(vectors, last_Vector))
         magnitude = (sum(x ** 2 for x in vectors) ** 0.5) * (sum(x ** 2 for x in last_Vector) ** 0.5)
 
-    print('%s\t%s' % ((MovieTitle, last_Movie), dot_product/magnitude))
+        print('%s\t%s' % ((MovieTitle, last_Movie), dot_product/magnitude))
 
     last_Tuple = (MovieTitle, vectors)
