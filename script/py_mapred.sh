@@ -38,10 +38,10 @@ mapred streaming \
 -reducer "python3 ./src/py_mapred/MoviesVector_Reducer.py"
 
 mapred streaming \
--files ./src/py_mapred/MoviesVector_Reducer.py \
+-files ./src/py_mapred/CosineSimilarity_Reducer.py \
 -input hdfs:///user/hadoop/results/py_mapred/job3/part* \
 -output results/py_mapred/job4 \
--reducer "python3 ./src/py_mapred/MoviesVector_Reducer.py"
+-reducer "python3 ./src/py_mapred/CosineSimilarity_Reducer.py"
 
 end=$(date +%s)
 total_time=$((end - start))
