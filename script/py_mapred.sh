@@ -15,9 +15,10 @@ hadoop fs -rm -r results/py_mapred/job || true
 # continue
 start=$(date +%s)
 
-hadoop jar /home/hadoop/hadoop-3.2.2/share/hadoop/tools/lib/hadoop-streaming-3.2.2.jar \
+# -input netflix_data/cleaned_moviesTitles.csv \
+mapred streaming \
 -files ./src/py_mapred/DataDividedByMovie_Mapper.py,./src/py_mapred/UserList_Mapper.py,./src/py_mapred/MoviesVector_Reducer.py \
--input netflix_data/cleaned_moviesTitles.csv \
+-input sample_movies.csv \
 -output results/py_mapred/job \
 -mapper "python3 ./src/py_mapred/DataDividedByMovie_Mapper.py" \
 -mapper "python3 ./src/py_mapred/UserList_Mapper.py" \
