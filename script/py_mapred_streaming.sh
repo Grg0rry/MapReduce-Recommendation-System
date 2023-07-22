@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 # Input
 # input_data="netflix_data/cleaned_moviesTitles.csv"
