@@ -1,10 +1,9 @@
 #!/bin/bash
 set -e
 
-# SEARCH (EDIT HERE)
-movie_file="/home/hadoop/recommendation-system/Movie_Search.txt"
-input_data="netflix_data/cleaned_moviesTitles.csv"
-
+# Input
+# input_data="netflix_data/cleaned_moviesTitles.csv"
+input_data="netflix_data/sample"
 
 # check hdfs connection
 hadoop fs -ls /
@@ -25,6 +24,7 @@ start=$(date +%s)
 # Job1: DataDividedByMovie
 hadoop fs -ls results/py_mapred_streaming/job1
 if [[ $? -ne 0 ]]; then
+    time_1=$(date +%s)
     hadoop fs -rm -r results/py_mapred_streaming/job1
     mapred streaming \
     -files DataDividedByMovie_Mapper.py,DataDividedByMovie_Reducer.py \
@@ -32,57 +32,61 @@ if [[ $? -ne 0 ]]; then
     -output results/py_mapred_streaming/job1 \
     -mapper "python3 DataDividedByMovie_Mapper.py" \
     -reducer "python3 DataDividedByMovie_Reducer.py"
+    time_2=$(date +%s)
+    total_time=$((time_2 - time_1))
+    echo "task 1/4 done... time taken: $total_time seconds"
 fi
 
 # Job2: UserList
 hadoop fs -ls results/py_mapred_streaming/job2
 if [[ $? -ne 0 ]]; then
+    time_1=$(date +%s)
     mapred streaming \
     -files UserList_Mapper.py,UserList_Reducer.py \
     -input $input_data \
     -output results/py_mapred_streaming/job2 \
     -mapper "python3 UserList_Mapper.py" \
     -reducer "python3 UserList_Reducer.py"
+    time_2=$(date +%s)
+    total_time=$((time_2 - time_1))
+    echo "task 2/4 done... time taken: $total_time seconds"
 fi
 
 # Job3: MoviesVector
 hadoop fs -ls results/py_mapred_streaming/job3
 if [[ $? -ne 0 ]]; then
+    time_1=$(date +%s)
     mapred streaming \
     -files MoviesVector_Mapper.py,MoviesVector_Reducer.py \
     -input results/py_mapred_streaming/job1/part-00000,results/py_mapred_streaming/job2/part-00000 \
     -output results/py_mapred_streaming/job3 \
     -mapper "python3 MoviesVector_Mapper.py" \
     -reducer "python3 MoviesVector_Reducer.py"
+    time_2=$(date +%s)
+    total_time=$((time_2 - time_1))
+    echo "task 3/4 done... time taken: $total_time seconds"
 fi
 
 # Job4: CosineSimilarity
 hadoop fs -ls results/py_mapred_streaming/job4
 if [[ $? -ne 0 ]]; then
+    time_1=$(date +%s)
     mapred streaming \
     -files CosineSimilarity_Mapper.py,CosineSimilarity_Reducer.py \
     -input results/py_mapred_streaming/job3/part-00000 \
     -output results/py_mapred_streaming/job4 \
     -mapper "python3 CosineSimilarity_Mapper.py" \
     -reducer "python3 CosineSimilarity_Reducer.py"
-fi
-
-# Job5: SearchRecommendation
-hadoop fs -ls results/py_mapred_streaming/job5
-if [[ $? -ne 0 ]]; then
-    mapred streaming \
-    -files QueryRecommendation_Mapper.py,QueryRecommendation_Reducer.py \
-    -input results/py_mapred_streaming/job4/part-00000,$movie_file \
-    -output results/py_mapred_streaming/job5 \
-    -mapper "python3 QueryRecommendation_Mapper.py" \
-    -reducer "python3 QueryRecommendation_Reducer.py"
+    time_2=$(date +%s)
+    total_time=$((time_2 - time_1))
+    echo "task 4/4 done... time taken: $total_time seconds"
 fi
 
 # calculate time
 end=$(date +%s)
 total_time=$((end - start))
 echo "Total time taken: $total_time seconds"
-echo "-- Results can be found in hdfs -> results/py_mapred/job5"
+echo "-- Results can be found in hdfs -> results/py_mapred/job4"
 
 
 # -D mapred.reduce.tasks=4 

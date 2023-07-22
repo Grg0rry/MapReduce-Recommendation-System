@@ -1,13 +1,11 @@
 #!/bin/bash
 
-# SEARCH (EDIT HERE)
-movie_file="/home/hadoop/recommendation-system/Movie_Search.txt"
+# Input
 # input_data="/home/hadoop/recommendation-system/data/cleaned_moviesTitles.csv"
-input_data="/home/hadoop/recommendation-system/data/chunksaa"
-
+input_data="/home/hadoop/recommendation-system/data/500MB/sample"
 
 # check if in directory
-directory="/home/hadoop/recommendation-system/src/py_mapreduce"
+directory="/home/hadoop/recommendation-system/src/3"
 if [[ $(pwd) != directory ]]; then
     cd "/home/hadoop/recommendation-system/src/py_mapreduce"    
     echo "Switch directory to $directory"
@@ -26,32 +24,54 @@ start=$(date +%s)
 # Job1: DataDividedByMovie
 ls results/job1
 if [[ $? -ne 0 ]]; then
+    time_1=$(date +%s)
     cat $input_data | python3 DataDividedByMovie_Mapper.py | sort | python3 DataDividedByMovie_Reducer.py | tee results/job1 >/dev/null
+    time_2=$(date +%s)
+    total_time=$((time_2 - time_1))
+    echo "task 1/4 done... time taken: $total_time seconds"
 fi
 
 # Job2: UserList
 ls results/job2
 if [[ $? -ne 0 ]]; then
+    time_1=$(date +%s)
     cat $input_data | python3 UserList_Mapper.py | sort | python3 UserList_Reducer.py | tee results/job2 >/dev/null
+    time_2=$(date +%s)
+    total_time=$((time_2 - time_1))
+    echo "task 2/4 done... time taken: $total_time seconds"
 fi
 
 # Job3: MoviesVector
 ls results/job3
 if [[ $? -ne 0 ]]; then
+    time_1=$(date +%s)
     cat results/job1 results/job2 | python3 MoviesVector_Mapper.py | sort | python3 MoviesVector_Reducer.py | tee results/job3 >/dev/null
+    time_2=$(date +%s)
+    total_time=$((time_2 - time_1))
+    echo "task 3/4 done... time taken: $total_time seconds"
 fi
 
 # Job4: CosineSimilarity
 ls results/job4
 if [[ $? -ne 0 ]]; then
+    time_1=$(date +%s)
     cat results/job3 | python3 CosineSimilarity_Mapper.py | sort | python3 CosineSimilarity_Reducer.py | tee results/job4 >/dev/null
+    time_2=$(date +%s)
+    total_time=$((time_2 - time_1))
+    echo "task 4/4 done... time taken: $total_time seconds"
 fi
+
+# Job_Optinal: MovieList
+# ls results/job_Optional
+# if [[ $? -ne 0 ]]; then
+#     cat $input_data | python3 MovieList_Mapper.py | sort | python3 MovieList_Reducer.py | tee results/job_Optional >/dev/null
+# fi
 
 # calculate time
 end=$(date +%s)
 total_time=$((end - start))
 echo "Total time taken: $total_time seconds"
-echo "-- Results can be found in local -> results/job5"
+echo "-- Results can be found in local -> results/job4"
 
 
 # -D mapred.reduce.tasks=4 
