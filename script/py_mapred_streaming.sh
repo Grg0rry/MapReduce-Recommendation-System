@@ -3,6 +3,7 @@
 # Input
 # input_data="netflix_data/cleaned_moviesTitles.csv"
 input_data="netflix_data/sample"
+search_file="netflix_data/Search_List.txt"
 
 # check hdfs connection
 hadoop fs -ls /
@@ -44,12 +45,15 @@ if [[ $? -ne 0 ]]; then
     echo "task 2/4 done..."
 fi
 
+hadoop fs -rm -r $search_file
+hadoop fs -put /home/hadoop/recommendation-system/src/Search_List.txt $search_file
+
 # Job3: MoviesVector
 hadoop fs -ls results/py_mapred_streaming/job3
 if [[ $? -ne 0 ]]; then
     time mapred streaming \
     -files MoviesVector_Mapper.py,MoviesVector_Reducer.py \
-    -input results/py_mapred_streaming/job1/part-00000,results/py_mapred_streaming/job2/part-00000 \
+    -input results/py_mapred_streaming/job1/part-00000,results/py_mapred_streaming/job2/part-00000,$search_file \
     -output results/py_mapred_streaming/job3 \
     -mapper "python3 MoviesVector_Mapper.py" \
     -reducer "python3 MoviesVector_Reducer.py"
