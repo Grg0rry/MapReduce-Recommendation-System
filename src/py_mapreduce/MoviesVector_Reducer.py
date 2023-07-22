@@ -18,12 +18,11 @@ for line in sys.stdin:
         MovieRating[MovieTitle] = UserRating
 
 # compiles to a vector
-for MovieTitle, UserRating in MovieRating.items():
-    print('%s\t%s' % (MovieTitle, UserRating))
+UserIndexMap = {user: index for index, user in enumerate(UserList)}
 
-# for MovieTitle, UserRating in MovieRating.items():
-#     Vector = [0] * len(UserList)
-#     for UserID, Rating in UserRating:
-#         if UserID in UserList:
-#             Vector[UserList.index(UserID)] = Rating
-#     print('%s\t%s' % (MovieTitle, Vector))
+for MovieTitle, UserRating in MovieRating.items():
+    Vector = [0] * len(UserList)
+    for UserID, Rating in UserRating:
+        if UserID in UserList:
+            Vector[UserIndexMap[UserID]] = Rating
+    print('%s\t%s' % (MovieTitle, Vector))
