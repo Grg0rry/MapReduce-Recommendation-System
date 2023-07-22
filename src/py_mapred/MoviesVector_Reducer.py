@@ -5,6 +5,7 @@ from collections import defaultdict
 import ast
 
 MovieRating = defaultdict(list)
+UserList = []
 
 for line in sys.stdin:
     line = line.strip().split('\t', 1)
@@ -13,7 +14,7 @@ for line in sys.stdin:
         continue
 
     if line[0].startswith("$User_List"):
-        UserList = [int(item) for item in ast.literal_eval(line[1])]
+        UserList.append(line[1])
     else:
         MovieRating[line[0]] = [item for item in ast.literal_eval(line[1])]
 

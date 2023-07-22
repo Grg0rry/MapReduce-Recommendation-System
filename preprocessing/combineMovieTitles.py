@@ -11,8 +11,8 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     # Call function
-    ratings_df = pd.read_csv(args.ratings)
-    titles_df = pd.read_csv(args.titles)
+    ratings_df = pd.read_csv(args.ratings)[['UserID', 'Rating', 'RatingDate', 'MovieID']]
+    titles_df = pd.read_csv(args.titles)[['MovieID', 'ReleaseYear', 'MovieTitle']]
 
     # Merge dataframe
     movies_df = pd.merge(ratings_df, titles_df, how="left", on="MovieID")
