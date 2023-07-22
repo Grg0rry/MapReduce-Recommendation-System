@@ -14,7 +14,8 @@ for line in sys.stdin:
         UserID, Rating = line[1].split(':')
         MovieTitle = line[0]
         UserRating = MovieRating.get(MovieTitle, [])
-        MovieRating[MovieTitle].append((UserID, int(Rating)))
+        UserRating.append((UserID, int(Rating)))
+        MovieRating[MovieTitle] = UserRating
 
 # compiles to a vector
 for MovieTitle, UserRating in MovieRating.items():

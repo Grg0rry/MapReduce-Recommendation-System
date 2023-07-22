@@ -5,16 +5,19 @@ from mrjob.job import MRJob
 class UserList(MRJob):
 
     def mapper(self, _, line):
-        MovieRating = line.split("\t", 5)
-        # MovieRating = line.split(",", 5)
+        line = line.strip().split(",", 2)
 
-        UserID = int(MovieRating[0])
-        yield(1, UserID)
+        if len(line) < 3:
+            return
+        
+        UserID = int(line[1])
+        
+        yield(UserID, "")
 
+    def reducer(self, key, values):
+        UserID = int(key)
 
-    def reducer(self, key, UserID):        
-        yield(None, list(set(UserID)))
-
+        yield("$User_List", UserID)
 
 if __name__ == '__main__':
     UserList.run()
