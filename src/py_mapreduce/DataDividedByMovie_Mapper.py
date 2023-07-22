@@ -3,10 +3,10 @@
 import sys
 
 for line in sys.stdin:
-    line = line.strip().split(",", 5)
+    line = line.strip().split(",", 2)
 
-    UserID = int(line[0])
-    MovieTitle = line[5]
-    Rating = int(line[1])
+    UserID = int(line[1])
+    MovieTitle = line[0]
+    Rating = int(line[2])
     
     print('%s\t%s' % (MovieTitle, f'{UserID}:{Rating}'))
