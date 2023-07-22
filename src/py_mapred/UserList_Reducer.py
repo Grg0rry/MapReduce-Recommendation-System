@@ -10,6 +10,6 @@ for line in sys.stdin:
     UserID = int(line[0])
 
     if last_UserID != UserID:
-        print('%s\t%s' % ("_$UserList", last_UserID))
+        print('%s\t%s' % ("$User_List", last_UserID))
 
     last_UserID = UserID

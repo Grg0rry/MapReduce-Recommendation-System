@@ -9,7 +9,7 @@ MovieRating = {}
 for line in sys.stdin:
     line = line.strip().split('\t', 1)
 
-    if line[0].startswith("_$UserList"):
+    if line[0].startswith("$User_List"):
         temp_UserList.append(line[1])
     else:
         UserID, Rating = line[1].split(':')
