@@ -8,6 +8,9 @@ MovieRating = {}
 # process both mappers
 for line in sys.stdin:
     line = line.strip().split('\t', 1)
+    
+    if len(line) < 2:
+        continue
 
     if line[0].startswith("$User_List"):
         temp_UserList.append(line[1])
@@ -17,8 +20,6 @@ for line in sys.stdin:
         UserRating = MovieRating.get(MovieTitle, [])
         UserRating.append((UserID, Rating))
         MovieRating[MovieTitle] = UserRating
-
-
 
 # compiles to a vector
 UserList = list(sorted(set(temp_UserList)))
