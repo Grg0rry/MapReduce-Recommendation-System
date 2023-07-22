@@ -8,6 +8,6 @@ for line in sys.stdin:
     if len(line) < 3:
         continue
 
-    Movietitle = int(line[0])
+    MovieTitle = line[0]
 
-    print('%s\t%s' % (Movietitle, ""))
+    print('%s\t%s' % (MovieTitle, ""))

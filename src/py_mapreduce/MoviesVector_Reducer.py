@@ -19,8 +19,11 @@ for line in sys.stdin:
 
 # compiles to a vector
 for MovieTitle, UserRating in MovieRating.items():
-    Vector = [0] * len(UserList)
-    for UserID, Rating in UserRating:
-        if UserID in UserList:
-            Vector[UserList.index(UserID)] = Rating
-    print('%s\t%s' % (MovieTitle, Vector))
+    print('%s\t%s' % (MovieTitle, UserRating))
+
+# for MovieTitle, UserRating in MovieRating.items():
+#     Vector = [0] * len(UserList)
+#     for UserID, Rating in UserRating:
+#         if UserID in UserList:
+#             Vector[UserList.index(UserID)] = Rating
+#     print('%s\t%s' % (MovieTitle, Vector))
