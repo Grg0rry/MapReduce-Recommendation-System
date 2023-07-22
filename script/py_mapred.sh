@@ -13,9 +13,9 @@ if [[ $? -ne 0 ]]; then
 fi
 
 # check if in directory
-directory="/home/hadoop/recommendation-system/src/py_mapred"
+directory="/home/hadoop/recommendation-system/src/py_mapreduce"
 if [[ $(pwd) != directory ]]; then
-    cd "/home/hadoop/recommendation-system/src/py_mapred"    
+    cd "/home/hadoop/recommendation-system/src/py_mapreduce" 
     echo "Switch directory to $directory"
 fi
 
@@ -23,56 +23,56 @@ fi
 start=$(date +%s)
 
 # Job1: DataDividedByMovie
-hadoop fs -ls results/py_mapred/job1
+hadoop fs -ls results/py_mapred_streaming/job1
 if [[ $? -ne 0 ]]; then
     mapred streaming \
     -files DataDividedByMovie_Mapper.py,DataDividedByMovie_Reducer.py \
     -input $input_data \
-    -output results/py_mapred/job1 \
+    -output results/py_mapred_streaming/job1 \
     -mapper "python3 DataDividedByMovie_Mapper.py" \
     -reducer "python3 DataDividedByMovie_Reducer.py"
 fi
 
 # Job2: UserList
-hadoop fs -ls results/py_mapred/job2
+hadoop fs -ls results/py_mapred_streaming/job2
 if [[ $? -ne 0 ]]; then
     mapred streaming \
     -files UserList_Mapper.py,UserList_Reducer.py \
     -input $input_data \
-    -output results/py_mapred/job2 \
+    -output results/py_mapred_streaming/job2 \
     -mapper "python3 UserList_Mapper.py" \
     -reducer "python3 UserList_Reducer.py"
 fi
 
 # Job3: MoviesVector
-hadoop fs -ls results/py_mapred/job3
+hadoop fs -ls results/py_mapred_streaming/job3
 if [[ $? -ne 0 ]]; then
     mapred streaming \
     -files MoviesVector_Mapper.py,MoviesVector_Reducer.py \
-    -input results/py_mapred/job1/part-00000,results/py_mapred/job2/part-00000 \
-    -output results/py_mapred/job3 \
+    -input results/py_mapred_streaming/job1/part-00000,results/py_mapred_streaming/job2/part-00000 \
+    -output results/py_mapred_streaming/job3 \
     -mapper "python3 MoviesVector_Mapper.py" \
     -reducer "python3 MoviesVector_Reducer.py"
 fi
 
 # Job4: CosineSimilarity
-hadoop fs -ls results/py_mapred/job4
+hadoop fs -ls results/py_mapred_streaming/job4
 if [[ $? -ne 0 ]]; then
     mapred streaming \
     -files CosineSimilarity_Mapper.py,CosineSimilarity_Reducer.py \
-    -input hdfs:///user/hadoop/results/py_mapred/job3/part-00000 \
-    -output results/py_mapred/job4 \
+    -input results/py_mapred_streaming/job3/part-00000 \
+    -output results/py_mapred_streaming/job4 \
     -mapper "python3 CosineSimilarity_Mapper.py" \
     -reducer "python3 CosineSimilarity_Reducer.py"
 fi
 
 # Job5: SearchRecommendation
-hadoop fs -ls results/py_mapred/job5
+hadoop fs -ls results/py_mapred_streaming/job5
 if [[ $? -ne 0 ]]; then
     mapred streaming \
     -files QueryRecommendation_Mapper.py,QueryRecommendation_Reducer.py \
-    -input hdfs:///user/hadoop/results/py_mapred/job4/part-00000,$movie_file \
-    -output results/py_mapred/job5 \
+    -input results/py_mapred_streaming/job4/part-00000,$movie_file \
+    -output results/py_mapred_streaming/job5 \
     -mapper "python3 QueryRecommendation_Mapper.py" \
     -reducer "python3 QueryRecommendation_Reducer.py"
 fi
