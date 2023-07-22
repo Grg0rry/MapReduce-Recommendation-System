@@ -11,7 +11,6 @@ num_recommendation = 10
 
 for line in sys.stdin:
     
-
     line = line.strip().split('\t', 1)
     if line[0].startswith("$User_List"):
         UserList.append(line[1])
@@ -25,13 +24,24 @@ for line in sys.stdin:
         MovieRating[MovieTitle] = UserRating
 
 
-UserIndexMap = {user: index for index, user in enumerate(UserList)}
 
 for MovieTitle, UserRating in MovieRating.items():
-    Vector = [0] * len(UserList)
-    for UserID, Rating in UserRating:
-        if UserID in UserList:
-            Vector[UserIndexMap[UserID]] = Rating
+    Vector = []
+    found = False
+
+    if len(UserRating) < 1000:
+        continue
+
+    for Order_UserID in UserList:
+        for UserID, Rating in UserRating:
+            if Order_UserID == UserID:
+                Vector.append(Rating)
+                found = True
+                break
+
+        if not found:
+            Vector.append(0)
+
     MovieVector[MovieTitle] = Vector
     # print('%s\t%s' % (MovieTitle, Vector))
 
