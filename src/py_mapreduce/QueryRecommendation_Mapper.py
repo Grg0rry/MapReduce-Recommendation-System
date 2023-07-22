@@ -14,3 +14,5 @@ for line in sys.stdin:
     else:
         print('%s\t%s' % (line[0], line[1]))
 
+
+
