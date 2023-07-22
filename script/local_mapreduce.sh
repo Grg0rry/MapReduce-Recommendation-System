@@ -13,10 +13,8 @@ fi
 
 # store output
 rm -r results
-if [[ $? -eq 0 ]]; then
-    mkdir results
-    echo "Created directory results to store output"
-fi
+mkdir results
+echo "Created directory results to store output"
 
 # Execute each job
 start=$(date +%s)
