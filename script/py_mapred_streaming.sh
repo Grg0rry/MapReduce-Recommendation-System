@@ -68,6 +68,14 @@ fi
 #     echo "task 4/4 done..."
 # fi
 
+
+time mapred streaming \
+-files MovieList_Mapper.py,MovieList_Reducer.py \
+-input $input_data \
+-output results/py_mapred_streaming/tmp \
+-mapper "python3 MovieList_Mapper.py" \
+-reducer "python3 MovieList_Reducer.py"
+
 # calculate time
 end=$(date +%s)
 total_time=$((end - start))

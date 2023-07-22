@@ -2,15 +2,15 @@
 
 import sys
 
-last_MovieID = ""
+last_MovieTitle = ""
 
 for line in sys.stdin:
     line = line.strip().split("\t", 1)
     
-    MovieID = int(line[0])
+    MovieTitle = line[0]
 
-    if last_MovieID != MovieID:
-        print('%s\t%s' % (MovieID, ""))
+    if last_MovieTitle != MovieTitle:
+        print('%s\t%s' % (MovieTitle, ""))
 
-    last_MovieID = MovieID
+    last_MovieTitle = MovieTitle
 
