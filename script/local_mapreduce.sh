@@ -12,7 +12,7 @@ if [[ $(pwd) != directory ]]; then
 fi
 
 # store output
-ls results
+rm -r results
 if [[ $? -ne 0 ]]; then
     mkdir results
     echo "Created directory results to store output"

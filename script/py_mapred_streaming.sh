@@ -9,6 +9,7 @@ hadoop fs -ls /
 if [[ $? -ne 0 ]]; then
     echo "HDFS connection failed. Exiting..."
 fi
+hadoop fs -rm -r results/py_mapred_streaming
 
 # check if in directory
 directory="/home/hadoop/recommendation-system/src/py_mapreduce"
