@@ -13,7 +13,6 @@ for line in sys.stdin:
 
     Movie_Vector[MovieTitle] = vectors
 
-
 for MovieTitle, Vector in Movie_Vector.items():
     for Next_MovieTitle, Next_Vector in Movie_Vector.items():
         dot_product = sum(x * y for x, y in zip(Vector, Next_Vector))

@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 start=$(date +%s)
 
 python3 ./preprocessing/RatingsPreprocessing.py \
