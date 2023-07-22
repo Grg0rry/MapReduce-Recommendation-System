@@ -10,12 +10,13 @@ num_recommendation = 10
 
 
 for line in sys.stdin:
-    if line.startswith("$Search_Key"):
-        UserList.append(line.strip().split(",")[1])
+    
 
     line = line.strip().split('\t', 1)
     if line[0].startswith("$User_List"):
-        UserList.append(line[1])        
+        UserList.append(line[1])
+    elif line[0].startswith("$Search_Key"):
+        SearchList.append(line[1])
     else:
         UserID, Rating = line[1].split(':')
         MovieTitle = line[0]
