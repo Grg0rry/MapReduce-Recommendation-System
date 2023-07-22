@@ -13,7 +13,7 @@ fi
 
 # store output
 rm -r results
-if [[ $? -ne 0 ]]; then
+if [[ $? -eq 0 ]]; then
     mkdir results
     echo "Created directory results to store output"
 fi
