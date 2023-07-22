@@ -25,7 +25,7 @@ start=$(date +%s)
 ls results/job1
 if [[ $? -ne 0 ]]; then
     time_1=$(date +%s)
-    cat $input_data | python3 DataDividedByMovie_Mapper.py | sort | python3 DataDividedByMovie_Reducer.py | tee results/job1 >/dev/null
+    cat $input_data | python3 DataDividedByMovie_Mapper.py | sort | tee results/job1 >/dev/null
     time_2=$(date +%s)
     total_time=$((time_2 - time_1))
     echo "task 1/4 done... time taken: $total_time seconds"

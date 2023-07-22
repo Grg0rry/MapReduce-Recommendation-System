@@ -5,8 +5,7 @@ from mrjob.job import MRJob
 class DataDividedByMovie(MRJob):      
 
     def mapper(self, _, line):
-        MovieRating = line.split("\t", 5)
-        # MovieRating = line.split(",", 5)
+        line = line.strip().split(",", 2)
 
         UserID = int(MovieRating[0])
         MovieTitle = MovieRating[5]
@@ -18,3 +17,16 @@ class DataDividedByMovie(MRJob):
 
 if __name__ == '__main__':
     DataDividedByMovie.run()
+
+
+for line in sys.stdin:
+    line = line.strip().split(",", 2)
+
+    if len(line) < 3:
+        continue
+
+    UserID = int(line[1])
+    MovieTitle = line[0]
+    Rating = int(line[2])
+    
+    print('%s\t%s' % (MovieTitle, f'{UserID}:{Rating}'))

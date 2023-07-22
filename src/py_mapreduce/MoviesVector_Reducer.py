@@ -1,22 +1,20 @@
 #!/usr/bin/env python3
 
 import sys
-from collections import defaultdict
-import ast
 
-MovieRating = defaultdict(list)
+MovieRating = {}
 UserList = []
 
 for line in sys.stdin:
     line = line.strip().split('\t', 1)
-    
-    if len(line) < 2:
-        continue
 
     if line[0].startswith("$User_List"):
         UserList.append(line[1])
     else:
-        MovieRating[line[0]] = [item for item in ast.literal_eval(line[1])]
+        UserID, Rating = line[1].split(':')
+        MovieTitle = line[0]
+        UserRating = MovieRating.get(MovieTitle, [])
+        MovieRating[MovieTitle].append((UserID, int(Rating)))
 
 # compiles to a vector
 for MovieTitle, UserRating in MovieRating.items():

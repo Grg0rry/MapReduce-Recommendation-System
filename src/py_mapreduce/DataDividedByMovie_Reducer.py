@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 
 import sys
-from collections import defaultdict
 
-MovieRating = defaultdict(list)
+MovieRating = {}
 
 for line in sys.stdin:
     line = line.strip().split('\t', 1)
 
     UserID, Rating = line[1].split(':')
     MovieTitle = line[0]
-    MovieRating[MovieTitle].append((UserID, Rating))
+    UserRating = MovieRating.get(MovieTitle, [])
+    MovieRating[MovieTitle].append((UserID, int(Rating)))
 
 for MovieTitle, UserRating in MovieRating.items():
     print('%s\t%s' % (MovieTitle, UserRating))

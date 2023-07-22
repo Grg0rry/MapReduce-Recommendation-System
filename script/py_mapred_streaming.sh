@@ -25,11 +25,10 @@ hadoop fs -ls results/py_mapred_streaming/job1
 if [[ $? -ne 0 ]]; then
     time_1=$(date +%s)
     mapred streaming \
-    -files DataDividedByMovie_Mapper.py,DataDividedByMovie_Reducer.py \
+    -files DataDividedByMovie_Mapper.py \
     -input $input_data \
     -output results/py_mapred_streaming/job1 \
-    -mapper "python3 DataDividedByMovie_Mapper.py" \
-    -reducer "python3 DataDividedByMovie_Reducer.py"
+    -mapper "python3 DataDividedByMovie_Mapper.py"
     time_2=$(date +%s)
     total_time=$((time_2 - time_1))
     echo "task 1/4 done... time taken: $total_time seconds"

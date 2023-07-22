@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import sys
-import ast
 
 Movie_Vector = {}
 
@@ -9,7 +8,7 @@ for line in sys.stdin:
     line = line.strip().split('\t', 1)
 
     MovieTitle = line[0]
-    vectors = [int(item) for item in ast.literal_eval(line[1])]
+    vectors = [int(item.strip()) for item in line[1].split(',')]
 
     Movie_Vector[MovieTitle] = vectors
 
