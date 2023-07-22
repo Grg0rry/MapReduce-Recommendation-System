@@ -24,7 +24,6 @@ start=$(date +%s)
 hadoop fs -ls results/py_mapred_streaming/job1
 if [[ $? -ne 0 ]]; then
     time_1=$(date +%s)
-    hadoop fs -rm -r results/py_mapred_streaming/job1
     mapred streaming \
     -files DataDividedByMovie_Mapper.py,DataDividedByMovie_Reducer.py \
     -input $input_data \

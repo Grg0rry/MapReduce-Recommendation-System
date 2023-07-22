@@ -5,6 +5,9 @@ import sys
 for line in sys.stdin:
     line = line.strip().split(",", 2)
 
+    if len(line) < 3:
+        continue
+
     Movietitle = int(line[0])
 
     print('%s\t%s' % (Movietitle, ""))
