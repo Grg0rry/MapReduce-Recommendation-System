@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
 import sys
+from collections import defaultdict
 
 temp_UserList = []
-MovieRating = {}
+MovieRating = defaultdict(list)
 
 # process both mappers
 for line in sys.stdin:
@@ -17,25 +18,15 @@ for line in sys.stdin:
     else:
         UserID, Rating = line[1].split(':')
         MovieTitle = line[0]
-        UserRating = MovieRating.get(MovieTitle, [])
-        UserRating.append((UserID, Rating))
-        MovieRating[MovieTitle] = UserRating
+        # UserRating = MovieRating.get(MovieTitle, [])
+        # UserRating.append((UserID, Rating))
+        MovieRating[MovieTitle].append((UserID, Rating))
 
 # compiles to a vector
 UserList = list(sorted(set(temp_UserList)))
 for MovieTitle, UserRating in MovieRating.items():
-    Vector = []
-    
-    for Search_UserID in UserList:
-        found_match = False
-
-        for UserID, Rating in UserRating:
-            if UserID == Search_UserID:
-                Vector.append(Rating)           
-                found_match = True
-                break
-        
-        if not found_match:
-            Vector.append(0)
-    
+    Vector = [0] * len(UserList)
+    for UserID, Rating in UserRating:
+        if UserID in UserList:
+            Vector[UserList.index(UserID)] = Rating
     print('%s\t%s' % (MovieTitle, Vector))
