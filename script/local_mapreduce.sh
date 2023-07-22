@@ -5,7 +5,7 @@
 input_data="/home/hadoop/recommendation-system/data/500MB/sample"
 
 # check if in directory
-directory="/home/hadoop/recommendation-system/src/3"
+directory="/home/hadoop/recommendation-system/src/py_mapreduce"
 if [[ $(pwd) != directory ]]; then
     cd "/home/hadoop/recommendation-system/src/py_mapreduce"    
     echo "Switch directory to $directory"
