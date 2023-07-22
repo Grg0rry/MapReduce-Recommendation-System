@@ -7,4 +7,4 @@ for line in sys.stdin:
 
     UserID = int(line[0])
 
-    print('%s\t%s' % ("_$UserList", UserID))
+    print('%s\t%s' % (UserID, ""))

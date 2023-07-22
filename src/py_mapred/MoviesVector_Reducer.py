@@ -18,6 +18,8 @@ for line in sys.stdin:
         UserRating.append((UserID, Rating))
         MovieRating[MovieTitle] = UserRating
 
+
+
 # compiles to a vector
 UserList = list(sorted(set(temp_UserList)))
 for MovieTitle, UserRating in MovieRating.items():
