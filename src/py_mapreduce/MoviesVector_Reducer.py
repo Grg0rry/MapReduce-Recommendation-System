@@ -3,6 +3,7 @@
 import sys
 
 MovieRating = {}
+MovieVector = {}
 UserList = []
 
 for line in sys.stdin:
@@ -17,7 +18,7 @@ for line in sys.stdin:
         UserRating.append((UserID, int(Rating)))
         MovieRating[MovieTitle] = UserRating
 
-# compiles to a vector
+
 UserIndexMap = {user: index for index, user in enumerate(UserList)}
 
 for MovieTitle, UserRating in MovieRating.items():
@@ -25,4 +26,17 @@ for MovieTitle, UserRating in MovieRating.items():
     for UserID, Rating in UserRating:
         if UserID in UserList:
             Vector[UserIndexMap[UserID]] = Rating
-    print('%s\t%s' % (MovieTitle, Vector))
+    MovieVector[MovieTitle] = Vector
+    # print('%s\t%s' % (MovieTitle, Vector))
+
+
+movie_pairs = [(MovieTitle, Next_MovieTitle) for MovieTitle in MovieVector for Next_MovieTitle in MovieVector if MovieTitle != Next_MovieTitle]
+
+for MovieTitle, Next_MovieTitle in movie_pairs:
+    Vector = MovieVector[MovieTitle]
+    Next_Vector = MovieVector[Next_MovieTitle]
+
+    dot_product = sum(x * y for x, y in zip(Vector, Next_Vector))
+    magnitude = (sum(x ** 2 for x in Vector) ** 0.5) * (sum(x ** 2 for x in Next_Vector) ** 0.5)
+    
+    print('%s\t%s' % ((MovieTitle, Next_MovieTitle), dot_product/magnitude))
