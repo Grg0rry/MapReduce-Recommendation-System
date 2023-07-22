@@ -13,5 +13,4 @@ for line in sys.stdin:
     MovieRating[MovieTitle].append((UserID, Rating))
 
 for MovieTitle, UserRating in MovieRating.items():
-    if len(UserRating) > 100:
-        print('%s\t%s' % (MovieTitle, UserRating))
+    print('%s\t%s' % (MovieTitle, UserRating))

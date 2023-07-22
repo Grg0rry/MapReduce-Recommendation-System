@@ -3,7 +3,7 @@ set -e
 
 # SEARCH (EDIT HERE)
 movie_file="/home/hadoop/recommendation-system/Movie_Search.txt"
-input_data="netflix_data/cleaned_moviesTitles/aa"
+input_data="netflix_data/cleaned_moviesTitles.csv"
 
 
 # check hdfs connection
