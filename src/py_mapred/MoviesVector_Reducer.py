@@ -2,11 +2,10 @@
 
 import sys
 from collections import defaultdict
+import ast
 
-temp_UserList = []
 MovieRating = defaultdict(list)
 
-# process both mappers
 for line in sys.stdin:
     line = line.strip().split('\t', 1)
     
@@ -14,16 +13,11 @@ for line in sys.stdin:
         continue
 
     if line[0].startswith("$User_List"):
-        temp_UserList.append(line[1])
+        UserList = [int(item) for item in ast.literal_eval(line[1])]
     else:
-        UserID, Rating = line[1].split(':')
-        MovieTitle = line[0]
-        # UserRating = MovieRating.get(MovieTitle, [])
-        # UserRating.append((UserID, Rating))
-        MovieRating[MovieTitle].append((UserID, Rating))
+        MovieRating[line[0]] = [item for item in ast.literal_eval(line[1])]
 
 # compiles to a vector
-UserList = list(sorted(set(temp_UserList)))
 for MovieTitle, UserRating in MovieRating.items():
     Vector = [0] * len(UserList)
     for UserID, Rating in UserRating:
