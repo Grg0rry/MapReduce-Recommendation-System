@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 # SEARCH (EDIT HERE)
 movie_file="/home/hadoop/recommendation-system/Movie_Search.txt"
@@ -25,33 +24,27 @@ fi
 start=$(date +%s)
 
 # Job1: DataDividedByMovie
-ls results/job1 || true
+ls results/job1
 if [[ $? -ne 0 ]]; then
     cat $input_data | python3 DataDividedByMovie_Mapper.py | sort | python3 DataDividedByMovie_Reducer.py | tee results/job1 >/dev/null
 fi
 
 # Job2: UserList
-ls results/job2 || true
+ls results/job2
 if [[ $? -ne 0 ]]; then
     cat $input_data | python3 UserList_Mapper.py | sort | python3 UserList_Reducer.py | tee results/job2 >/dev/null
 fi
 
 # Job3: MoviesVector
-ls results/job3 || true
+ls results/job3
 if [[ $? -ne 0 ]]; then
     cat results/job1 results/job2 | python3 MoviesVector_Mapper.py | sort | python3 MoviesVector_Reducer.py | tee results/job3 >/dev/null
 fi
 
 # Job4: CosineSimilarity
-ls results/job4 || true
+ls results/job4
 if [[ $? -ne 0 ]]; then
     cat results/job3 | python3 CosineSimilarity_Mapper.py | sort | python3 CosineSimilarity_Reducer.py | tee results/job4 >/dev/null
-fi
-
-# Job5: QueryRecommendation
-ls results/job5 || true
-if [[ $? -ne 0 ]]; then
-    cat results/job4 $movie_file | python3 QueryRecommendation_Mapper.py | sort | python3 QueryRecommendation_Reducer.py | tee results/job5 >/dev/null
 fi
 
 # calculate time
