@@ -14,6 +14,8 @@ python3 ./preprocessing/combineMovieTitles.py \
 -titles ./data/cleaned_titles.csv \
 -output ./data/cleaned_moviesTitles.csv
 
+split -b 1G ./data/cleaned_moviesTitles.csv ./data/cleaned_moviesTitles/
+
 end=$(date +%s)
 total_time=$((end - start))
 echo "Total time taken: $total_time seconds"

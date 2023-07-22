@@ -19,7 +19,6 @@ hadoop fs -rm -r results/py_mapred/job1 || true
 hadoop fs -rm -r results/py_mapred/job2 || true
 hadoop fs -rm -r results/py_mapred/job3 || true
 hadoop fs -rm -r results/py_mapred/job4 || true
-hadoop fs -rm -r results/py_mapred/job5 || true
 
 # start timer
 start=$(date +%s)
@@ -27,14 +26,14 @@ start=$(date +%s)
 # execute mapreduce -- sample_movies.csv
 mapred streaming \
 -files DataDividedByMovie_Mapper.py,DataDividedByMovie_Reducer.py \
--input netflix_data/cleaned_moviesTitles.csv \
+-input netflix_data/cleaned_moviesTitles/aa \
 -output results/py_mapred/job1 \
 -mapper "python3 DataDividedByMovie_Mapper.py" \
 -reducer "python3 DataDividedByMovie_Reducer.py"
 
 mapred streaming \
 -files UserList_Mapper.py,UserList_Reducer.py \
--input netflix_data/cleaned_moviesTitles.csv \
+-input netflix_data/cleaned_moviesTitles/aa \
 -output results/py_mapred/job2 \
 -mapper "python3 UserList_Mapper.py" \
 -reducer "python3 UserList_Reducer.py"
