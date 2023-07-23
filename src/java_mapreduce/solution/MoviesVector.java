@@ -16,9 +16,12 @@ import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.omg.CORBA.Context;
 
+import solution.MoviesVector.MoviesVectorReducer.UserRating;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.StringJoiner;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,12 +41,15 @@ public class MoviesVector {
   /* Reducer */
   public static class MoviesVectorReducer extends Reducer<Text, Text, Text, Text> {
 
-    private static final List<String> UserList = new ArrayList<>();
-    private static final Map<String, List<UserRating>> MovieRating = new HashMap<>();
-
     @Override
     public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
       
+      Map<String, Integer> UserRatingsByOrder = new HashMap<>();
+      List<String> UserList = new ArrayList<>();
+
+      // List<String> UserList = new ArrayList<>();
+      // Map<String, List<UserRating>> MovieRating = new HashMap<>();
+
       for (Text value : values) {
         String[] items = value.toString().split("\t", 2);
 
@@ -55,40 +61,59 @@ public class MoviesVector {
           int UserID = Integer.parseInt(user_rating[0]);
           int Rating = Integer.parseInt(user_rating[1]);
 
-          List<UserRating> userRatings = MovieRating.getOrDefault(MovieTitle, new ArrayList<>());
-          userRatings.add(new UserRating(UserID, Rating));
-          MovieRating.put(MovieTitle, userRatings);
+          String key = MovieTitle + "_" + UserID;
+          UserRatingsByOrder.put(key, Rating);
+          // List<UserRating> userRatings = MovieRating.getOrDefault(MovieTitle, new ArrayList<>());
+          // userRatings.add(new UserRating(UserID, Rating));
+          // MovieRating.put(MovieTitle, userRatings);
         }
       }
 
-      for (Map.Entry<String, List<UserRating>> entry : MovieRating.entrySet()){
-        String MovieTitle = entry.getKey();
-        List<UserRating> UserRating = entry.getValue();
+      if (UserList.size() >= 1000) {
+        List<Integer> Vector = new ArrayList<>();
+        for (String Order_UserID : UserList) {
+          String key = key.toString() + "_" + Order_UserID; // Combine MovieTitle and UserID as the key
+          int Rating = UserRatingsByOrder.getOrDefault(key, 0);
+          Vector.add(Rating);
+        }
 
-        if (UserRating.size() >= 1000) {
-          Map<String, Integer> UserRatingsByOrder = new HashMap<>();
-          for (String Order_UserID : UserList) {
-            UserRatingsByOrder.put(Order_UserID, 0);
-          }
+        StringJoiner vectorBuilder = new StringJoiner(",");
+        for (Integer value : Vector) {
+          vectorBuilder.add(value.toString());
+        }
 
-          for (UserRating userRating : UserRating) {
-            int UserID = userRating.getUserID();
-            int Rating = userRating.getRating();
-            
-            if (UserRatingsByOrder.containsKey(String.valueOf(UserID))){
-              UserRatingsByOrder.put(String.valueOf(UserID), Rating);
-            }
-          }
-
-          List<Integer> Vector = new ArrayList<>(UserRatingsByOrder.values());
-          StringBuilder vectorBuilder = new StringBuilder();
-          while (Vector.iterator().hasNext()) {
-            vectorBuilder.append("," + Vector.iterator().next());
-          }         
-
-          context.write(new Text(MovieTitle), new Text(vectorBuilder.toString().replaceFirst(",", "")));
-        } 
+        context.write(key, new Text(vectorBuilder.toString()));
       }
+
+
+      // for (Map.Entry<String, List<UserRating>> entry : MovieRating.entrySet()){
+      //   String MovieTitle = entry.getKey();
+      //   List<UserRating> UserRating = entry.getValue();
+
+      //   if (UserRating.size() >= 1000) {
+      //     Map<String, Integer> UserRatingsByOrder = new HashMap<>();
+      //     for (String Order_UserID : UserList) {
+      //       UserRatingsByOrder.put(Order_UserID, 0);
+      //     }
+
+      //     for (UserRating userRating : UserRating) {
+      //       int UserID = userRating.getUserID();
+      //       int Rating = userRating.getRating();
+            
+      //       if (UserRatingsByOrder.containsKey(String.valueOf(UserID))){
+      //         UserRatingsByOrder.put(String.valueOf(UserID), Rating);
+      //       }
+      //     }
+
+      //     List<Integer> Vector = new ArrayList<>(UserRatingsByOrder.values());
+      //     StringBuilder vectorBuilder = new StringJoiner(",");
+      //     for (Integer value : Vector) {
+      //       vectorBuilder.add(value.toString());
+      //     }     
+
+      //     context.write(new Text(MovieTitle), new Text(vectorBuilder.toString()));
+      //   } 
+      // }
     }
 
     class UserRating {
