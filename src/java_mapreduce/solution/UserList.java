@@ -20,8 +20,7 @@ public class UserList {
     @Override
     public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 
-      String line = value.toString().trim();
-      String [] items = line.split(",", 3);
+      String[] items = value.toString().trim().split(",", 3);
 
       if (items.length >= 3) {
         int UserID = Integer.parseInt(items[1]);
@@ -60,8 +59,8 @@ public class UserList {
     job.setMapperClass(UserListMapper.class);
     job.setReducerClass(UserListReducer.class);
           
-    job.setOutputKeyClass(Text.class);
-    job.setOutputValueClass(IntWritable.class);
+    job.setOutputKeyClass(IntWritable.class);
+    job.setOutputValueClass(Text.class);
           
     job.waitForCompletion(true);
   }
