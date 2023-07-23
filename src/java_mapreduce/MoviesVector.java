@@ -45,7 +45,7 @@ public class MoviesVector {
     public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
       
       for (Text value : values) {
-        String[] items = value.trim().split("\t", 2);
+        String[] items = value.split("\t", 2);
 
         if (items[0].startsWith("$User_List")){
           UserList.add(items[1]);
@@ -90,23 +90,23 @@ public class MoviesVector {
         } 
       }
     }
-  }
+    
+    class UserRating {
+      private int UserID;
+      private int Rating;
 
-  class UserRating {
-    private int UserID;
-    private int Rating;
+      public UserRating(int UserID, int Rating) {
+        this.UserID = UserID;
+        this.Rating = Rating;
+      }
 
-    public UserRating(int UserID, int Rating) {
-      this.UserID = UserID;
-      this.Rating = Rating;
-    }
+      public int getUserID(){
+        return UserID;
+      }
 
-    public int getUserID(){
-      return UserID;
-    }
-
-    public int getRating(){
-      return Rating;
+      public int getRating(){
+        return Rating;
+      }
     }
   }
 
