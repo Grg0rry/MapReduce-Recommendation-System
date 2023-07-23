@@ -8,7 +8,7 @@ import heapq
 
 Movie_Vector = {}
 Magnitude = {}
-Similarities = defaultdict(list)
+# Similarities = defaultdict(list)
 
 for line in sys.stdin:
     line = line.strip().split('\t', 1)
@@ -23,10 +23,12 @@ for (MovieTitle, Vector), (Next_MovieTitle, Next_Vector) in combinations(Movie_V
     dot_product = np.dot(Vector, Next_Vector)
     similarity = dot_product / (Magnitude[MovieTitle] * Magnitude[Next_MovieTitle])
 
-    Similarities[MovieTitle].append((Next_MovieTitle, similarity))
-    Similarities[Next_MovieTitle].append((MovieTitle, similarity))
+    print('%s\t%s' % ((MovieTitle, MovieTitle), similarity))
 
-for movie in Similarities:
-    top_similar_movies = heapq.nlargest(10, Similarities[movie], key=lambda x: x[1])
-    for similar_movie, similarity in top_similar_movies:
-        print('%s\t%s' % ((movie, similar_movie), similarity))
+#     Similarities[MovieTitle].append((Next_MovieTitle, similarity))
+#     Similarities[Next_MovieTitle].append((MovieTitle, similarity))
+
+# for movie in Similarities:
+#     top_similar_movies = heapq.nlargest(10, Similarities[movie], key=lambda x: x[1])
+#     for similar_movie, similarity in top_similar_movies:
+#         print('%s\t%s' % ((movie, similar_movie), similarity))
