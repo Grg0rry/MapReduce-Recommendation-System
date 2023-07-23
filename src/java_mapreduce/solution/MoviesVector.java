@@ -120,7 +120,7 @@ public class MoviesVector {
     
     MultipleInputs.addInputPath(job, new Path(args[0]), TextInputFormat.class, MoviesVectorMapper.class);
     MultipleInputs.addInputPath(job, new Path(args[1]), TextInputFormat.class, MoviesVectorMapper.class);
-    TextOutputFormat.setOutputPath(job, new Path(args[2]));
+    FileOutputFormat.setOutputPath(job, new Path(args[2]));
 
     // FileInputFormat.setInputPaths(job, new Path(args[0]));
     // FileOutputFormat.setOutputPath(job, new Path(args[1]));
