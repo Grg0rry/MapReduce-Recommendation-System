@@ -49,7 +49,7 @@ public class MoviesVector {
 
         if (items[0].startsWith("$User_List")){
           UserList.add(items[1]);
-        } else{
+        } else {
           String[] user_rating = items[1].trim().split(":");
           String MovieTitle = items[0].toString();
           int UserID = Integer.parseInt(user_rating[0]);

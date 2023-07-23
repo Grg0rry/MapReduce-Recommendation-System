@@ -28,23 +28,8 @@ public class DataDividedByMovie {
         String MovieTitle = items[0];
         int Rating = Integer.parseInt(items[2]);
 
-        context.write(new Text(MovieTitle), new Text(UserID + ':' + Rating));
+        context.write(new Text(MovieTitle), new Text(String.valueOf(UserID) + ':' + String.valueOf(Rating)));
       }
-    }
-  }
-
-  /* Reducer */
-  public static class DataDividedByMovieReducer extends Mapper<Text, Text, Text, Text> {
-
-    @Override
-    public void map(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
-
-      StringBuilder UserRating_lst = new StringBuilder();
-      while (values.iterator().hasNext()){
-        UserRating_lst.append(',' + values.iterator().next());
-      }
-
-      context.write(key, new Text(UserRating_lst.toString().replaceFirst(",", "")));
     }
   }
 
@@ -66,7 +51,6 @@ public class DataDividedByMovie {
     FileOutputFormat.setOutputPath(job, new Path(args[1]));
 
     job.setMapperClass(DataDividedByMovieMapper.class);
-    job.setReducerClass(DataDividedByMovieReducer.class);
 
     job.setOutputKeyClass(Text.class);
     job.setOutputValueClass(Text.class);
