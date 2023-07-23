@@ -17,10 +17,10 @@ for line in sys.stdin:
     Vector = [int(item.strip()) for item in line[1].strip('[]').split(',')]
 
     Movie_Vector[MovieTitle] = Vector
-    Magnitude[MovieTitle] = np.linalg.norm(Vector)
+    Magnitude[MovieTitle] = np.linalg.norm(np.array(Vector))
 
 for (MovieTitle, Vector), (Next_MovieTitle, Next_Vector) in combinations(Movie_Vector.items(), 2):
-    dot_product = np.dot(Vector, Next_Vector)
+    dot_product = np.dot(np.array(Vector), np.array(Next_Vector))
     similarity = dot_product / (Magnitude[MovieTitle] * Magnitude[Next_MovieTitle])
 
     print('%s\t%s' % ((MovieTitle, MovieTitle), similarity))
