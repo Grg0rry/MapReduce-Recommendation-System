@@ -31,7 +31,7 @@ public class MoviesVector {
     @Override
     public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
       
-      context.write(new Text(""), value);
+      context.write(new Text(""), new Text(key + "\t" + value));
     }
   }
 
@@ -90,7 +90,7 @@ public class MoviesVector {
         } 
       }
     }
-    
+
     class UserRating {
       private int UserID;
       private int Rating;
