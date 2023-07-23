@@ -61,8 +61,8 @@ public class MoviesVector {
           int UserID = Integer.parseInt(user_rating[0]);
           int Rating = Integer.parseInt(user_rating[1]);
 
-          String key = MovieTitle + "_" + UserID;
-          UserRatingsByOrder.put(key, Rating);
+          String userKey = MovieTitle + "_" + UserID;
+          UserRatingsByOrder.put(userKey , Rating);
           // List<UserRating> userRatings = MovieRating.getOrDefault(MovieTitle, new ArrayList<>());
           // userRatings.add(new UserRating(UserID, Rating));
           // MovieRating.put(MovieTitle, userRatings);
@@ -72,7 +72,7 @@ public class MoviesVector {
       if (UserList.size() >= 1000) {
         List<Integer> Vector = new ArrayList<>();
         for (String Order_UserID : UserList) {
-          String key = key.toString() + "_" + Order_UserID; // Combine MovieTitle and UserID as the key
+          String userKey = key.toString() + "_" + Order_UserID; // Combine MovieTitle and UserID as the key
           int Rating = UserRatingsByOrder.getOrDefault(key, 0);
           Vector.add(Rating);
         }
