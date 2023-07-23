@@ -47,7 +47,7 @@ public class MoviesVector {
     public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
       
       for (Text value : values) {
-        String[] items = value.split("\t");
+        String[] items = value.toString().split("\t", 2);
 
         if (items[0].startsWith("$User_List")){
           UserList.add(items[1]);
