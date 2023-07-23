@@ -58,9 +58,11 @@ public class UserList {
 
     job.setMapperClass(UserListMapper.class);
     job.setReducerClass(UserListReducer.class);
-          
-    job.setOutputKeyClass(IntWritable.class);
-    job.setOutputValueClass(Text.class);
+    
+    job.setMapOutputKeyClass(IntWritable.class);
+		job.setMapOutputValueClass(Text.class);
+    job.setOutputKeyClass(Text.class);
+    job.setOutputValueClass(IntWritable.class);
           
     job.waitForCompletion(true);
   }

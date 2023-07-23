@@ -123,15 +123,21 @@ public class MoviesVector {
 
     job.setJarByClass(MoviesVector.class);
     job.setJobName("MoviesVector");
-      
-    FileInputFormat.setInputPaths(job, new Path(args[0]));
-    FileOutputFormat.setOutputPath(job, new Path(args[1]));
+    
+    MultipleInputs.addInputPath(job, new Path(args[0]), TextInputFormat.class, MoviesVectorMapper.class);
+    MultipleInputs.addInputPath(job, new Path(args[1]), TextInputFormat.class, MoviesVectorMapper.class);
+    TextOutputFormat.setOutputPath(job, new Path(args[2]));
+
+    // FileInputFormat.setInputPaths(job, new Path(args[0]));
+    // FileOutputFormat.setOutputPath(job, new Path(args[1]));
 
     job.setMapperClass(MoviesVectorMapper.class);
     job.setReducerClass(MoviesVectorReducer.class);
-          
+
+    job.setMapOutputKeyClass(Text.class);
+		job.setMapOutputValueClass(Text.class);
     job.setOutputKeyClass(Text.class);
-    job.setOutputValueClass(IntWritable.class);
+    job.setOutputValueClass(Text.class);
           
     job.waitForCompletion(true);
   }
