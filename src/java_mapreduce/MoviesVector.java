@@ -31,7 +31,7 @@ public class MoviesVector {
     @Override
     public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
       
-      context.write(new Text(""), value.tostring());
+      context.write(new Text(""), value);
     }
   }
 
@@ -44,7 +44,7 @@ public class MoviesVector {
     @Override
     public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
       
-      for (String value : values) {
+      for (Text value : values) {
         String[] items = value.trim().split("\t", 2);
 
         if (items[0].startsWith("$User_List")){
