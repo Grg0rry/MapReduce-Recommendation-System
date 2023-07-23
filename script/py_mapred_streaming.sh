@@ -61,16 +61,16 @@ if [[ $? -ne 0 ]]; then
 fi
 
 # Job4: CosineSimilarity
-# hadoop fs -ls results/py_mapred_streaming/job4
-# if [[ $? -ne 0 ]]; then
-#     time mapred streaming \
-#     -files CosineSimilarity_Mapper.py,CosineSimilarity_Reducer.py \
-#     -input results/py_mapred_streaming/job3/part-00000 \
-#     -output results/py_mapred_streaming/job4 \
-#     -mapper "python3 CosineSimilarity_Mapper.py" \
-#     -reducer "python3 CosineSimilarity_Reducer.py"
-#     echo "task 4/4 done..."
-# fi
+hadoop fs -ls results/py_mapred_streaming/job4
+if [[ $? -ne 0 ]]; then
+    time mapred streaming \
+    -files CosineSimilarity_Mapper.py,CosineSimilarity_Reducer.py \
+    -input results/py_mapred_streaming/job3/part-00000 \
+    -output results/py_mapred_streaming/job4 \
+    -mapper "python3 CosineSimilarity_Mapper.py" \
+    -reducer "python3 CosineSimilarity_Reducer.py"
+    echo "task 4/4 done..."
+fi
 
 # calculate time
 end=$(date +%s)
