@@ -7,6 +7,7 @@ UserList = []
 
 for line in sys.stdin:
     line = line.strip().split('\t', 1)
+    
     if line[0].startswith("$User_List"):
         UserList.append(line[1])
     else:

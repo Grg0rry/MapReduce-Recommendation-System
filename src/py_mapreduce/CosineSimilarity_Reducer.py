@@ -10,7 +10,8 @@ for line in sys.stdin:
     line = line.strip().split('\t', 1)
 
     MovieTitle = line[0]
-    Vector = [int(item.strip()) for item in line[1].split(',')]
+    Vector = [int(item.strip()) for item in line[1].strip('[]').split(',')]
+
     Movie_Vector[MovieTitle] = Vector
     Magnitude[MovieTitle] = math.sqrt(sum(x ** 2 for x in Vector))
 
