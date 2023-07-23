@@ -52,7 +52,6 @@ fi
 hadoop fs -ls results/py_mapred_streaming/job3
 if [[ $? -ne 0 ]]; then
     time mapred streaming \
-    -outputformat org.apache.hadoop.mapreduce.lib.output.TextOutputFormat \
     -files MoviesVector_Mapper.py,MoviesVector_Reducer.py \
     -input results/py_mapred_streaming/job1/part-00000,results/py_mapred_streaming/job2/part-00000 \
     -output results/py_mapred_streaming/job3 \

@@ -17,25 +17,17 @@ for line in sys.stdin:
         UserRating.append((UserID, int(Rating)))
         MovieRating[MovieTitle] = UserRating
 
-
 for MovieTitle, UserRating in MovieRating.items():
-    
-    Vector = []
-    found = False
-
     if len(UserRating) < 1000:
         continue
+    
+    UserRatingsByOrder = {Order_UserID: 0 for Order_UserID in UserList}
 
-    for Order_UserID in UserList:
-        for UserID, Rating in UserRating:
-            if Order_UserID == UserID:
-                Vector.append(Rating)
-                found = True
-                break
-
-        if not found:
-            Vector.append(0)
-
+    for UserID, Rating in UserRating:
+        if UserID in UserRatingsByOrder:
+            UserRatingsByOrder[UserID] = Rating
+    
+    Vector = list(UserRatingsByOrder.values())
     print('%s\t%s' % (MovieTitle, Vector))
 
 
