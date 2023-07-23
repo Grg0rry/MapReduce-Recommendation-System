@@ -2,7 +2,7 @@
 
 # Input -- input_data="netflix_data/cleaned_moviesTitles.csv"
 input_data="netflix_data/sample"
-output_data="results/py_mapred/output"
+output_data="results/py_mapred_streaming/output"
 
 # Check hdfs connection
 hadoop fs -ls /

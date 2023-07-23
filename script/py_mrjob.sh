@@ -1,37 +1,64 @@
 #!/bin/bash
-set -e
 
-# check hdfs connection
+# Input -- input_data="netflix_data/cleaned_moviesTitles.csv"
+input_data="hdfs:///user/hadoop/netflix_data/sample"
+output_data="hdfs:///user/hadoop/results/py_mrjob/output"
+
+# Check hdfs connection
 hadoop fs -ls /
 if [[ $? -ne 0 ]]; then
     echo "HDFS connection failed. Exiting..."
 fi
+hadoop fs -rm -r results/py_mrjob
 
+# Check directory
+directory="/home/hadoop/recommendation-system/src/py_mrjob"
+if [[ $(pwd) != directory ]]; then
+    cd "/home/hadoop/recommendation-system/src/py_mrjob"    
+    echo "Switch directory to $directory"
+fi
 
-# remove output if already exist
-hadoop fs -rm -r results/py_mrjob/job1 || true
-hadoop fs -rm -r results/py_mrjob/job2 || true
-hadoop fs -rm -r results/py_mrjob/job3 || true
-
-
-# continue
+# Execute each job
 start=$(date +%s)
 
-python3 ./src/py_mrjob/DataDividedByMovie.py \
-#-r hadoop hdfs:///user/hadoop/netflix_data/cleaned_moviesTitles.csv \
--r hadoop hdfs:///user/hadoop/sample_movies/part-m-00000 \
---output hdfs:///user/hadoop/results/py_mrjob/job1
+# Job1: DataDividedByMovie
+hadoop fs -ls results/py_mrjob/job1
+if [[ $? -ne 0 ]]; then
+    time python3 DataDividedByMovie.py \
+    -r hadoop $input_data \
+    --output hdfs:///user/hadoop/results/py_mrjob/job1
+    echo "task 1/4 done..."
+fi
 
-python3 ./src/py_mrjob/UserList.py \
-# -r hadoop hdfs:///user/hadoop/netflix_data/cleaned_moviesTitles.csv \
--r hadoop hdfs:///user/hadoop/sample_movies/part-m-00000 \
---output hdfs:///user/hadoop/results/py_mrjob/job2
+# Job2: UserList
+hadoop fs -ls results/py_mrjob/job2
+if [[ $? -ne 0 ]]; then
+    time python3 UserList.py \
+    -r hadoop $input_data \
+    --output hdfs:///user/hadoop/results/py_mrjob/job2
+    echo "task 2/4 done..."
+fi
 
-python3 ./src/py_mrjob/.py \
--r hadoop hdfs:///user/hadoop/results/py_mrjob/job1 \
---addition_input hdfs:///user/hadoop/results/py_mrjob/job2 \
---output hdfs:///user/hadoop/results/py_mrjob/job3
+# Job3: MoviesVector
+hadoop fs -ls results/py_mrjob/job3
+if [[ $? -ne 0 ]]; then
+    time python3 MoviesVector.py \
+    -r hadoop hdfs:///user/hadoop/results/py_mrjob/job1,hdfs:///user/hadoop/results/py_mrjob/job2 \
+    --output hdfs:///user/hadoop/results/py_mrjob/job3
+    echo "task 3/4 done..."
+fi
 
+# Job4: CosineSimilarity
+hadoop fs -ls results/py_mrjob/job4
+if [[ $? -ne 0 ]]; then
+    time python3 CosineSimilarity.py \
+    -r hadoop hdfs:///user/hadoop/results/py_mrjob/job3 \
+    --output $output_data
+    echo "task 4/4 done..."
+fi
+
+# Calculate time
 end=$(date +%s)
 total_time=$((end - start))
 echo "Total time taken: $total_time seconds"
+echo "-- Results can be found in hdfs -> $output_data"

@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import sys
-import math
 from itertools import combinations
 import numpy as np
 
@@ -15,7 +14,7 @@ for line in sys.stdin:
     Vector = [int(item.strip()) for item in line[1].strip('[]').split(',')]
 
     Movie_Vector[MovieTitle] = Vector
-    Magnitude[MovieTitle] = math.sqrt(sum(x ** 2 for x in Vector))
+    Magnitude[MovieTitle] = np.linalg.norm(Vector)
 
 for (MovieTitle, Vector), (Next_MovieTitle, Next_Vector) in combinations(Movie_Vector.items(), 2):
     dot_product = np.dot(Vector, Next_Vector)
