@@ -4,6 +4,7 @@ import sys
 from itertools import combinations
 import numpy as np
 from collections import defaultdict
+import heapq
 
 Movie_Vector = {}
 Magnitude = {}
@@ -26,6 +27,6 @@ for (MovieTitle, Vector), (Next_MovieTitle, Next_Vector) in combinations(Movie_V
     Similarities[Next_MovieTitle].append((MovieTitle, similarity))
 
 for movie in Similarities:
-    top_similar_movies = sorted(Similarities[movie], key=lambda x: x[1], reverse=True)[:10]
+    top_similar_movies = heapq.nlargest(10, Similarities[movie], key=lambda x: x[1])
     for similar_movie, similarity in top_similar_movies:
         print('%s\t%s' % ((movie, similar_movie), similarity))
