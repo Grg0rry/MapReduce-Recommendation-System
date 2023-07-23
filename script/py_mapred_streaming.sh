@@ -1,18 +1,17 @@
 #!/bin/bash
 
-# Input
-# input_data="netflix_data/cleaned_moviesTitles.csv"
+# Input -- input_data="netflix_data/cleaned_moviesTitles.csv"
 input_data="netflix_data/sample"
-search_file="netflix_data/Search_List.txt"
+output_data="results/py_mapred/output"
 
-# check hdfs connection
+# Check hdfs connection
 hadoop fs -ls /
 if [[ $? -ne 0 ]]; then
     echo "HDFS connection failed. Exiting..."
 fi
 hadoop fs -rm -r results/py_mapred_streaming
 
-# check if in directory
+# Check directory
 directory="/home/hadoop/recommendation-system/src/py_mapreduce"
 if [[ $(pwd) != directory ]]; then
     cd "/home/hadoop/recommendation-system/src/py_mapreduce" 
@@ -45,9 +44,6 @@ if [[ $? -ne 0 ]]; then
     echo "task 2/4 done..."
 fi
 
-# hadoop fs -rm -r $search_file
-# hadoop fs -put /home/hadoop/recommendation-system/src/Search_List.txt $search_file
-
 # Job3: MoviesVector
 hadoop fs -ls results/py_mapred_streaming/job3
 if [[ $? -ne 0 ]]; then
@@ -66,17 +62,17 @@ if [[ $? -ne 0 ]]; then
     time mapred streaming \
     -files CosineSimilarity_Mapper.py,CosineSimilarity_Reducer.py \
     -input results/py_mapred_streaming/job3/part-00000 \
-    -output results/py_mapred_streaming/job4 \
+    -output $output_data \
     -mapper "python3 CosineSimilarity_Mapper.py" \
     -reducer "python3 CosineSimilarity_Reducer.py"
     echo "task 4/4 done..."
 fi
 
-# calculate time
+# Calculate time
 end=$(date +%s)
 total_time=$((end - start))
 echo "Total time taken: $total_time seconds"
-echo "-- Results can be found in hdfs -> results/py_mapred/job4"
+echo "-- Results can be found in hdfs -> $output_data"
 
 
 # -D mapred.reduce.tasks=4 
