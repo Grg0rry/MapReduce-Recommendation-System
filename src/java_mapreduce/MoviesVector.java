@@ -31,8 +31,6 @@ public class MoviesVector {
     @Override
     public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
       
-      // String[] line = value.toString().split("\t", 2);
-      // String new_value = line[0] + '\t' + line[1];
       context.write(new Text(""), value);
     }
   }

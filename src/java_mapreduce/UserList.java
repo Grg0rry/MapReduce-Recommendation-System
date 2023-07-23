@@ -15,7 +15,7 @@ import java.io.IOException;
 public class UserList {
   
   /* Mapper */
-  public static class UserListMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
+  public static class UserListMapper extends Mapper<LongWritable, Text, IntWritable, Text> {
 
     @Override
     public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
@@ -26,8 +26,8 @@ public class UserList {
       if (items.length >= 3) {
         int UserID = Integer.parseInt(items[1]);
 
-        context.write(new Text("$User_List"), new IntWritable(UserID));
-      }            
+        context.write(new IntWritable(UserID), new Text(""));
+      }
     }
   }
 
