@@ -3,8 +3,6 @@
 import sys
 from itertools import combinations
 import numpy as np
-from collections import defaultdict
-import heapq
 
 Movie_Vector = {}
 Magnitude = {}
@@ -18,18 +16,15 @@ for line in sys.stdin:
     Movie_Vector[MovieTitle] = Vector
     Magnitude[MovieTitle] = np.linalg.norm(Vector)
 
-movie_vectors = np.array(list(Movie_Vector.values()))
-magnitudes = np.linalg.norm(movie_vectors, axis=1)
-dot_products = np.dot(movie_vectors, movie_vectors.T)
-similarities = dot_products / np.outer(magnitudes, magnitudes)
-
-for i, (MovieTitle, Next_MovieTitle) in enumerate(list(combinations(Movie_Vector.keys(), 2))):
-    similarity = similarities[i]
+for (MovieTitle, Vector), (Next_MovieTitle, Next_Vector) in combinations(Movie_Vector.items(), 2):
+    dot_product = np.dot(Vector, Next_Vector)
+    similarity = dot_product / (Magnitude[MovieTitle] * Magnitude[Next_MovieTitle])
     print('%s\t%s' % ((MovieTitle, Next_MovieTitle), similarity))
 
 
 # Similarities = {}
-
+# from collections import defaultdict
+# import heapq
 # for (MovieTitle, Vector), (Next_MovieTitle, Next_Vector) in combinations(Movie_Vector.items(), 2):
 #     dot_product = np.dot(Vector, Next_Vector)
 #     similarity = dot_product / (Magnitude[MovieTitle] * Magnitude[Next_MovieTitle])   
