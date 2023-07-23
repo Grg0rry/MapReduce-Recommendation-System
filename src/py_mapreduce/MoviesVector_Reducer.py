@@ -7,14 +7,14 @@ UserList = []
 
 for line in sys.stdin:
     line = line.strip().split('\t', 1)
-    
+
     if line[0].startswith("$User_List"):
         UserList.append(line[1])
     else:
         UserID, Rating = line[1].split(':')
         MovieTitle = line[0]
         UserRating = MovieRating.get(MovieTitle, [])
-        UserRating.append((UserID, int(Rating)))
+        UserRating.append((int(UserID), int(Rating)))
         MovieRating[MovieTitle] = UserRating
 
 for MovieTitle, UserRating in MovieRating.items():
