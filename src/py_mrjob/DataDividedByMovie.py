@@ -16,5 +16,8 @@ class DataDividedByMovie(MRJob):
 
         yield(MovieTitle, f'{UserID}:{Rating}')
 
+    def mapper(self, key, value):
+        yield(key, list(value))
+
 if __name__ == '__main__':
     DataDividedByMovie.run()

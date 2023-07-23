@@ -3,6 +3,7 @@
 import sys
 import math
 from itertools import combinations
+import numpy as np
 
 Movie_Vector = {}
 Magnitude = {}
@@ -17,7 +18,7 @@ for line in sys.stdin:
     Magnitude[MovieTitle] = math.sqrt(sum(x ** 2 for x in Vector))
 
 for (MovieTitle, Vector), (Next_MovieTitle, Next_Vector) in combinations(Movie_Vector.items(), 2):
-    dot_product = sum(x * y for x, y in zip(Vector, Next_Vector))
+    dot_product = np.dot(Vector, Next_Vector)
     similarity = dot_product / (Magnitude[MovieTitle] * Magnitude[Next_MovieTitle])
 
     print('%s\t%s' % ((MovieTitle, Next_MovieTitle), similarity))

@@ -9,7 +9,6 @@ class UserList(MRJob):
 
         if len(line) < 3:
             return
-        
         UserID = int(line[1])
         
         yield(UserID, "")
