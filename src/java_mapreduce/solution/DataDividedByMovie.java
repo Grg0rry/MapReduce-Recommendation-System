@@ -35,12 +35,6 @@ public class DataDividedByMovie {
 
   /* Driver */
   public static void main(String[] args) throws Exception {
-
-    if (args.length != 2) {
-      System.out.printf(
-        "Usage: MapReduce <input dir> <output dir>\n");
-      System.exit(-1);
-    }
       
     Job job = new Job();
 
