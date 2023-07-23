@@ -16,12 +16,15 @@ import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.omg.CORBA.Context;
 
+import solution.MoviesVector.MoviesVectorMapper;
+import solution.MoviesVector.MoviesVectorReducer;
 import solution.MoviesVector.MoviesVectorReducer.UserRating;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
+import java.util.stream.Collectors;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,11 +44,11 @@ public class MoviesVector {
   /* Reducer */
   public static class MoviesVectorReducer extends Reducer<Text, Text, Text, Text> {
 
+    public static final Map<String, Integer> UserRatingsByOrder = new HashMap<>();
+    public static final List<String> UserList = new ArrayList<>();
+
     @Override
     public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
-      
-      Map<String, Integer> UserRatingsByOrder = new HashMap<>();
-      List<String> UserList = new ArrayList<>();
 
       // List<String> UserList = new ArrayList<>();
       // Map<String, List<UserRating>> MovieRating = new HashMap<>();
@@ -61,29 +64,23 @@ public class MoviesVector {
           int UserID = Integer.parseInt(user_rating[0]);
           int Rating = Integer.parseInt(user_rating[1]);
 
-          String userKey = MovieTitle + "_" + UserID;
-          UserRatingsByOrder.put(userKey , Rating);
-          // List<UserRating> userRatings = MovieRating.getOrDefault(MovieTitle, new ArrayList<>());
+          List<UserRating> userRatings = MovieRating.getOrDefault(MovieTitle, new ArrayList<>());
           // userRatings.add(new UserRating(UserID, Rating));
-          // MovieRating.put(MovieTitle, userRatings);
+          userRatings.add(Rating);
+          MovieRating.put(MovieTitle, userRatings);
         }
       }
 
-      if (UserList.size() >= 1000) {
-        List<Integer> Vector = new ArrayList<>();
-        for (String Order_UserID : UserList) {
-          String userKey = key.toString() + "_" + Order_UserID; // Combine MovieTitle and UserID as the key
-          int Rating = UserRatingsByOrder.getOrDefault(key, 0);
-          Vector.add(Rating);
-        }
+      List<String> Vector = MovieRating.entrySet().stream()
+      .filter(entry -> entry.getValue().size() >= 1000)
+      .map(entry -> entry.getKey() + ":" + entry.getValue().stream().map(Object::toString).collect(Collectors.joining(",")))
+      .collect(Collectors.toList());
 
-        StringJoiner vectorBuilder = new StringJoiner(",");
-        for (Integer value : Vector) {
-          vectorBuilder.add(value.toString());
-        }
-
-        context.write(key, new Text(vectorBuilder.toString()));
-      }
+      StringJoiner vectorBuilder = new StringJoiner(",");
+      vectorBuilder.append(Vector.stream().map(Object::toString).collect(Collectors.joining(",")));
+      
+      context.write(key, new Text(vectorBuilder.toString()));
+    }
 
 
       // for (Map.Entry<String, List<UserRating>> entry : MovieRating.entrySet()){
@@ -114,8 +111,7 @@ public class MoviesVector {
       //     context.write(new Text(MovieTitle), new Text(vectorBuilder.toString()));
       //   } 
       // }
-    }
-
+      
     class UserRating {
       private int UserID;
       private int Rating;
