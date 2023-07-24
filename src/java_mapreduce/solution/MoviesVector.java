@@ -41,15 +41,13 @@ public class MoviesVector {
       }
       
       if (userRatings.size() >= 1000) {
-        for (Pair pair : userRatings) {
-          context.write(new Text(movieTitle), pair);
-        }
+        context.write(new Text(movieTitle), userRatings);
       }
     }
   }
 
   /* Reducer */
-  public static class MoviesVectorReducer extends Reducer<Text, List<Pair>, Text, Text> {
+  public static class MoviesVectorReducer extends Reducer<Text, List<Pair>, Text, List<Integer>> {
 
     private Map<Integer, Integer> userRatingsByOrder;
     private Map<Integer, Integer> temp_userRatingsByOrder;
