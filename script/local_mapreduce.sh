@@ -23,6 +23,7 @@ rm -r results
 mkdir results
 echo "Created directory results to temporary store output"
 hadoop fs -get "$input_data" "results/$(basename "$input_data")"
+tmp_input="results/$(basename "$input_data")"
 hadoop fs -mkdir results/local_mapreduce
 
 # Execute each job
@@ -31,14 +32,14 @@ start=$(date +%s)
 # Job1: DataDividedByMovie
 ls results/job1
 if [[ $? -ne 0 ]]; then
-    time cat $input_data | python3 DataDividedByMovie_Mapper.py | sort | tee results/job1 >/dev/null
+    time cat $tmp_input | python3 DataDividedByMovie_Mapper.py | sort | tee results/job1 >/dev/null
     echo "task 1/4 done..."
 fi
 
 # Job2: UserList
 ls results/job2
 if [[ $? -ne 0 ]]; then
-    time cat $input_data | python3 UserList_Mapper.py | sort | python3 UserList_Reducer.py | tee results/job2 >/dev/null
+    time cat $tmp_input | python3 UserList_Mapper.py | sort | python3 UserList_Reducer.py | tee results/job2 >/dev/null
     echo "task 2/4 done..."
 fi
 
