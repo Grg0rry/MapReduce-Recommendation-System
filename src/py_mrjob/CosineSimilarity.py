@@ -7,7 +7,7 @@ from itertools import combinations
 
 class CosineSimilarity(MRJob):
 
-    def mapper_init(self):
+    def reducer_init(self):
         self.Movie_Vector = {}
         self.Magnitude = {}
 
@@ -31,8 +31,8 @@ class CosineSimilarity(MRJob):
 
     def steps(self):
         return [
-            MRStep(mapper_init=self.mapper_init,
-                   mapper=self.mapper,
+            MRStep(mapper=self.mapper,
+                   reducer_init=self.reducer_init,
                    reducer=self.reducer),
             MRStep(reducer=self.reducer_2)
         ]

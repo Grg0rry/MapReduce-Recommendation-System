@@ -2,7 +2,6 @@
 
 from mrjob.job import MRJob
 from mrjob.step import MRStep
-# import pydoop.hdfs as hdfs
 
 class MovieVector(MRJob):
     
@@ -10,8 +9,6 @@ class MovieVector(MRJob):
         super(MovieVector, self).configure_args()
         self.add_file_arg('--file1', type=str)
 
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
     def userlist(self):
         self.UserList = []
 
@@ -32,9 +29,7 @@ class MovieVector(MRJob):
         if len(UserRating) >= 1000:      
             yield MovieTitle, UserRating
 
-
     def reducer(self, MovieTitle, UserRatings):
-                
         UserRatingsByOrder = {Order_UserID: 0 for Order_UserID in self.UserList}
 
         for UserRating in UserRatings:
