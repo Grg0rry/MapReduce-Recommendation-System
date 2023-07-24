@@ -41,7 +41,7 @@ public class MoviesVector {
   }
 
   /* Reducer */
-  public static class MoviesVectorReducer extends Reducer<Text, Text, Text, ArrayWritable> {
+  public static class MoviesVectorReducer extends Reducer<Text, Text, Text, Text> {
 
     private Map<Integer, Integer> userRatingsByOrder;
     private Map<Integer, Integer> temp_userRatingsByOrder;
@@ -60,7 +60,7 @@ public class MoviesVector {
     }
 
     @Override
-    public void reduce(Text key, Iterable<javax.xml.soap.Text> values, Context context) throws IOException, InterruptedException {
+    public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
       temp_userRatingsByOrder = new HashMap<>(userRatingsByOrder);
 
       while (values.iterator().hasNext()){
@@ -68,8 +68,12 @@ public class MoviesVector {
         temp_userRatingsByOrder.put(Integer.parseInt(UserRating[0]), Integer.parseInt(UserRating[1]));
       }
 
-      List<Integer> vector = new ArrayList<>(temp_userRatingsByOrder.values());
-      context.write(key, new ArrayWritable(IntWritable.class, vector));
+      StringBuilder strblder = new StringBuilder();
+      while (temp_userRatingsByOrder.values().iterator().hasNext()){
+				strblder.append(',' + temp_userRatingsByOrder.values().iterator().next());
+			}
+
+      context.write(key, new Text(strblder.toString().replaceFirst(',', '')));
     }
   }
 
@@ -91,7 +95,7 @@ public class MoviesVector {
     job.setMapOutputKeyClass(Text.class);
 		job.setMapOutputValueClass(Text.class);
     job.setOutputKeyClass(Text.class);
-    job.setOutputValueClass(ArrayWritable.class);
+    job.setOutputValueClass(Text.class);
           
     job.waitForCompletion(true);
   }
