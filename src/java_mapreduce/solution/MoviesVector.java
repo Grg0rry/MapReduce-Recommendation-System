@@ -90,6 +90,11 @@ public class MoviesVector {
       List<Integer> vector = new ArrayList<>(userRatingsByOrder.values());
       context.write(key, vector);
     }
+
+    @Override
+    public void cleanup(Context context) throws IOException, InterruptedException {
+      super.cleanup(context);
+    }
   }
 
   /* Driver */
