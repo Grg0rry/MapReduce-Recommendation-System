@@ -21,9 +21,10 @@ class CosineSimilarity(MRJob):
 
         yield(MovieTitle, Vector)
 
-    def reducer(self, MovieTitle, Vector):
-        self.Movie_Vector[MovieTitle] = np.array(Vector)
-        self.Magnitude[MovieTitle] = np.linalg.norm(Vector)
+    def reducer(self, MovieTitle, Vectors):
+        for Vector in Vectors:
+            self.Movie_Vector[MovieTitle] = np.array(Vector)
+            self.Magnitude[MovieTitle] = np.linalg.norm(Vector)
     
     def reducer_final(self):
         for (MovieTitle, Vector), (Next_MovieTitle, Next_Vector) in combinations(self.Movie_Vector.items(), 2):
