@@ -36,7 +36,7 @@ public class MoviesVector {
       String[] userRating = line[1].split(",");
 
       for (int i=0; i < userRating.length; i++){
-        context.write(new Text(line[0]), Text(userRating[i]));
+        context.write(new Text(line[0]), new Text(userRating[i]));
       }
     }
   }
