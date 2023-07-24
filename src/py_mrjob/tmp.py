@@ -1,11 +1,9 @@
-import pydoop.hdfs as hdfs
-
-with hdfs.open('/user/hadoop/results/py_mrjob/job2/part-00000', 'r') as f:
-    cnt = 1
-    for line in f.readlines():
-        if cnt > 10:
-            break
+cat = subprocess.Popen(["hadoop", "fs", "-cat", "/user/hadoop/results/py_mrjob/job2/part-00000"], stdout=subprocess.PIPE)
+cnt = 1
+for line in cat.stdout:
+    
+    if cnt > 10:
+        break
         
-        line = line.strip().split('\t',1)
-
-        print(line[0])
+    line = line.strip().split('\t',1)
+    print(line[0])
