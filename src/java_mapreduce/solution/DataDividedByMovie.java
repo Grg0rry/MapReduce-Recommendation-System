@@ -66,7 +66,7 @@ public class DataDividedByMovie {
     FileOutputFormat.setOutputPath(job, new Path(args[1]));
 
     job.setMapperClass(DataDividedByMovieMapper.class);
-    job.setMapperClass(DataDividedByMovieReducer.class);
+    job.setReducerClass(DataDividedByMovieReducer.class);
     
     job.setMapOutputKeyClass(Text.class);
 		job.setMapOutputValueClass(Text.class);
