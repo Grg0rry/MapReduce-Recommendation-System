@@ -41,10 +41,10 @@ public class DataDividedByMovie {
       
       StringBuilder strblder = new StringBuilder();
       while (values.iterator().hasNext()){
-        strblder.append(','+values.iterator().next());
+        strblder.append(',' + values.iterator().next());
       }
       
-      context.write(key, new Text(strblder.toString().replaceFirst(',','')));
+      context.write(key, new Text(strblder.toString().replaceFirst(",","")));
     }
   }
 

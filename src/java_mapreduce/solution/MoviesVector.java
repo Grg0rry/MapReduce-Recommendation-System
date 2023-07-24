@@ -39,7 +39,7 @@ public class MoviesVector extends Configured implements Tool {
       Path[] cacheFiles = context.getLocalCacheFiles();
       if (cacheFiles != null && cacheFiles.length > 0){
         try (BufferedReader br = new BufferedReader(new FileReader(cacheFiles[0].toString()))) {
-          String line:
+          String line;
           while ((line = br.readLine()) != null) {
             String[] parts = line.split("\t", 2);
             if (parts.length == 2) {
