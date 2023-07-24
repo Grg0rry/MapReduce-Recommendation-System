@@ -27,9 +27,9 @@ class MovieVector(MRJob):
             UserID, Rating = pair.split(':')
             UserRating.append((int(UserID), int(Rating)))
         self.MovieRating[MovieTitle] = UserRating
-        yield MovieTitle, _
+        yield MovieTitle, ""
 
-    def reducer(self, MovieTitle, _):        
+    def reducer(self, MovieTitle, value):
         UserRatings = self.MovieRating[MovieTitle]
 
         if len(UserRatings) < 1000:
