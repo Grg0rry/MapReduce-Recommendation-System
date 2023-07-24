@@ -2,6 +2,7 @@
 
 from mrjob.job import MRJob
 from mrjob.step import MRStep
+import pydoop.hdfs as hdfs
 
 class MovieVector(MRJob):
     
@@ -14,7 +15,7 @@ class MovieVector(MRJob):
         self.UserList = []
         self.MovieRating = {}
 
-        with open(self.options.file1, 'r') as file1:
+        with hdfs.open(self.options.file1, 'r') as file1:
             for line in file1:
                 line = line.strip().replace('"','').split('\t',1)
                 self.UserList.append(int(line[1]))
