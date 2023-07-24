@@ -36,7 +36,7 @@ public class MoviesVector {
 
       String movieTitle = line[0];
 
-      for (String userRating: line[1].split(",")){
+      for (String userRating: line[1]){
         context.write(new Text(movieTitle), Text(userRating));
       }
     }
