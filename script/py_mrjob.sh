@@ -44,8 +44,8 @@ hadoop fs -ls results/py_mrjob/job3
 if [[ $? -ne 0 ]]; then
     time python3 MoviesVector.py \
     -r hadoop \
-    hdfs:///user/hadoop/results/py_mrjob/job1/part* \
-    --file1 hdfs:///user/hadoop/results/py_mrjob/job2/part* \
+    hdfs:///user/hadoop/results/py_mrjob/job1/part-00000 \
+    --file1 hdfs:///user/hadoop/results/py_mrjob/job2/part-00000 \
     --output hdfs:///user/hadoop/results/py_mrjob/job3
     echo "task 3/4 done..."
 fi
@@ -54,7 +54,7 @@ fi
 hadoop fs -ls results/py_mrjob/job4
 if [[ $? -ne 0 ]]; then
     time python3 CosineSimilarity.py \
-    -r hadoop hdfs:///user/hadoop/results/py_mrjob/job3/part* \
+    -r hadoop hdfs:///user/hadoop/results/py_mrjob/job3/part-00000 \
     --output $output_data
     echo "task 4/4 done..."
 fi
