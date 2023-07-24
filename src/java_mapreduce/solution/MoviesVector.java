@@ -7,6 +7,7 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.ArrayWritable;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.Mapper;
@@ -27,27 +28,21 @@ import org.apache.hadoop.util.ToolRunner;
 public class MoviesVector {
 
   /* Mapper */
-  public static class MoviesVectorMapper extends Mapper<LongWritable, Text, Text, List<Pair>> {
+  public static class MoviesVectorMapper extends Mapper<LongWritable, Text, Text, Text> {
     
     @Override
     public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
       String[] line = value.toString().split("\t", 2);
 
       String movieTitle = line[0];
-      List<Pair> userRatings = new ArrayList<>();
-      for (String ratingPair : line[1].split(",")){
-        String[] rating = ratingPair.split(":");
-        userRatings.add(new Pair(Integer.parseInt(rating[0]), Integer.parseInt(rating[1])));
-      }
-      
-      if (userRatings.size() >= 1000) {
-        context.write(new Text(movieTitle), userRatings);
-      }
+      String userRatings = line[1];
+
+      context.write(new Text(movieTitle), Text(userRatings));
     }
   }
 
   /* Reducer */
-  public static class MoviesVectorReducer extends Reducer<Text, List<Pair>, Text, List<Integer>> {
+  public static class MoviesVectorReducer extends Reducer<Text, Text, Text, ArrayWritable> {
 
     private Map<Integer, Integer> userRatingsByOrder;
     private Map<Integer, Integer> temp_userRatingsByOrder;
@@ -66,20 +61,21 @@ public class MoviesVector {
     }
 
     @Override
-    public void reduce(Text key, Iterable<List<Pair>> values, Context context) throws IOException, InterruptedException {
+    public void reduce(Text key, Text values, Context context) throws IOException, InterruptedException {
       temp_userRatingsByOrder = new HashMap<>(userRatingsByOrder);
 
-      for (List<Pair> userRatings : values) {
-        for (Pair userRating : userRatings) {
-          Integer userID = userRating.userID;
-          Integer rating = userRating.rating;
-
-          temp_userRatingsByOrder.put(userID, rating);
+      for (String ratingPairs_str : values){
+        String[] ratingPair = ratingPairs_str.split(",");
+        for (String rp: ratingPair) {
+          String[] rating = rp.split(":");
+          temp_userRatingsByOrder.put(
+            Integer.parseInt(rating[0]), Integer.parseInt(rating[1])
+          )
         }
       }
 
       List<Integer> vector = new ArrayList<>(temp_userRatingsByOrder.values());
-      context.write(key, vector);
+      context.write(key, new ArrayWritable(Integer.class, vector));
     }
   }
 
@@ -99,20 +95,10 @@ public class MoviesVector {
     job.setReducerClass(MoviesVectorReducer.class);
 
     job.setMapOutputKeyClass(Text.class);
-		job.setMapOutputValueClass(List.class);
+		job.setMapOutputValueClass(Text.class);
     job.setOutputKeyClass(Text.class);
-    job.setOutputValueClass(List.class);
+    job.setOutputValueClass(ArrayWritable.class);
           
     job.waitForCompletion(true);
-  }
-}
-
-class Pair {
-  public Integer userID;
-  public Integer rating;
-
-  public Pair(Integer userID, Integer rating){
-    this.userID = userID;
-    this.rating = rating;
   }
 }
