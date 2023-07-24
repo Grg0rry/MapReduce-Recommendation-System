@@ -37,7 +37,7 @@ public class DataDividedByMovie {
   public static class DataDividedByMovieReducer extends Reducer<Text, Text, Text, Text> {
 
     @Override
-    public void reduce(Text key, Iterable<javax.xml.soap.Text> values, Context context) throws IOException, InterruptedException {
+    public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
       
       StringBuilder strblder = new StringBuilder();
       while (values.iterator().hasNext()){
