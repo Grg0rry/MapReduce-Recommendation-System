@@ -14,7 +14,7 @@ hadoop fs -rm -r results/py_mapred_streaming
 # Check directory
 directory="/home/hadoop/recommendation-system/src/py_mapreduce"
 if [[ $(pwd) != directory ]]; then
-    cd "/home/hadoop/recommendation-system/src/py_mapreduce" 
+    cd $directory
     echo "Switch directory to $directory"
 fi
 
@@ -76,10 +76,4 @@ fi
 end=$(date +%s)
 total_time=$((end - start))
 echo "Total time taken: $total_time seconds"
-echo "-- Results can be found in hdfs -> $output_data"
-
-
-# -D mapred.reduce.tasks=4 
-# -file ~/mayo/smplMapper.py -mapper smplMapper.py 
-# -file ~/mayo/smplReducer.py -reducer smplReducer.py 
-# -input customers.dat -input countries.dat -output mayo -partitioner org.apache.hadoop.mapred.lib.KeyFieldBasedPartitioner -jobconf stream.map.output.field.separator=^ -jobconf stream.num.map.output.key.fields=4 -jobconf map.output.key.field.separator=^ -jobconf num.key.fields.for.partition=1
+echo "-- Results in hdfs -> $output_data"

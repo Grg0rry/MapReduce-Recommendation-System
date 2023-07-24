@@ -1,20 +1,29 @@
 #!/bin/bash
 
 # Input -- input_data="/home/hadoop/recommendation-system/data/cleaned_moviesTitles.csv"
-input_data="/home/hadoop/recommendation-system/data/500MB/sample"
-output_data="/home/hadoop/recommendation-system/src/py_mapreduce/results/output"
+input_data="netflix_data/sample"
+output_data="results/local_mapreduce/output"
+
+# Check hdfs connection
+hadoop fs -ls /
+if [[ $? -ne 0 ]]; then
+    echo "HDFS connection failed. Exiting..."
+fi
+hadoop fs -rm -r results/local_mapreduce
 
 # Check directory
 directory="/home/hadoop/recommendation-system/src/py_mapreduce"
 if [[ $(pwd) != directory ]]; then
-    cd "/home/hadoop/recommendation-system/src/py_mapreduce"    
+    cd $directory
     echo "Switch directory to $directory"
 fi
 
 # Store output
 rm -r results
 mkdir results
-echo "Created directory results to store output"
+echo "Created directory results to temporary store output"
+hadoop fs -get "$input_data" "results/$(basename "$input_data")"
+hadoop fs -mkdir results/local_mapreduce
 
 # Execute each job
 start=$(date +%s)
@@ -43,12 +52,19 @@ fi
 # Job4: CosineSimilarity
 ls results/job4
 if [[ $? -ne 0 ]]; then
-    time cat results/job3 | python3 CosineSimilarity_Mapper.py | sort | python3 CosineSimilarity_Reducer.py | tee $output_data >/dev/null
+    time cat results/job3 | python3 CosineSimilarity_Mapper.py | sort | python3 CosineSimilarity_Reducer.py | tee results/job4 >/dev/null
     echo "task 4/4 done..."
 fi
+
+# Upload Job
+hadoop fs -put results/job1 results/local_mapreduce/job1
+hadoop fs -put results/job2 results/local_mapreduce/job2
+hadoop fs -put results/job3 results/local_mapreduce/job3
+hadoop fs -put results/job4 $output_data
+rm -r results
 
 # Calculate time
 end=$(date +%s)
 total_time=$((end - start))
 echo "Total time taken: $total_time seconds"
-echo "-- Results can be found in local -> $output_data"
+echo "-- Results in hdfs -> $output_data"

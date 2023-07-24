@@ -61,4 +61,4 @@ fi
 end=$(date +%s)
 total_time=$((end - start))
 echo "Total time taken: $total_time seconds"
-echo "-- Results can be found in hdfs -> $output_data"
+echo "-- Results in hdfs -> $output_data"
