@@ -34,8 +34,9 @@ public class MoviesVector {
     @Override
     protected void setup(Context context) throws IOException, InterruptedException {
       userList = new ArrayList<>();
+      Path[] cacheFiles = context.getLocalCacheFiles();
 
-      try (java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.InputStreamReader(context.getConfiguration().get("file1")))) {
+      try (BufferedReader reader = new BufferedReader(new FileReader(cacheFiles[0].toString()))) {
         String line;
         while ((line = reader.readLine()) != null) {
           String[] tokens = line.split("\t", 2);
@@ -49,7 +50,7 @@ public class MoviesVector {
       String[] line = value.toString().split("\t", 2);
 
       String movieTitle = line[0];
-      List<String> userRatings = new ArrayList<>();
+      List<Pair> userRatings = new ArrayList<>();
       for (String ratingPair : line[1].split(",")){
         String[] rating = ratingPair.split(":");
         userRatings.add(new Pair(Integer.parseInt(rating[0]), Integer.parseInt(rating[1])));
