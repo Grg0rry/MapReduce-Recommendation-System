@@ -24,7 +24,7 @@ import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
 
-public class MoviesVector extends Configured implements Tool {
+public class MoviesVector {
 
   /* Mapper */
   public static class MoviesVectorMapper extends Mapper<Object, Text, Text, Text> {
