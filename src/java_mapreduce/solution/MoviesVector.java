@@ -64,16 +64,14 @@ public class MoviesVector {
     public void reduce(Text key, Text values, Context context) throws IOException, InterruptedException {
       temp_userRatingsByOrder = new HashMap<>(userRatingsByOrder);
 
-      for (String ratingPairs_str : values){
-        String[] ratingPair = ratingPairs_str.split(",");
-        for (String rp: ratingPair) {
-          String[] rating = rp.split(":");
-          temp_userRatingsByOrder.put(Integer.parseInt(rating[0]), Integer.parseInt(rating[1]));
-        }
+      String[] ratingPair = values.split(",");
+      for (String rp: ratingPair) {
+        String[] rating = rp.split(":");
+        temp_userRatingsByOrder.put(Integer.parseInt(rating[0]), Integer.parseInt(rating[1]));
       }
 
       List<Integer> vector = new ArrayList<>(temp_userRatingsByOrder.values());
-      context.write(key, new ArrayWritable(Integer.class, vector));
+      context.write(key, new ArrayWritable(IntWritable.class, vector));
     }
   }
 
