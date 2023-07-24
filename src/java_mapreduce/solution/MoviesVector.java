@@ -46,7 +46,7 @@ public class MoviesVector {
   public static class MoviesVectorReducer extends Reducer<Text, Text, Text, Text> {
 
     private Map<Integer, Integer> userRatingsByOrder;
-    private Map<Integer, Integer> temp_userRatingsByOrder;
+    private List<IntWritable> userRatingsList;
 
     @Override
     protected void setup(Context context) throws IOException, InterruptedException {
@@ -61,23 +61,38 @@ public class MoviesVector {
           userRatingsByOrder.put(Integer.parseInt(tokens[1]), 0);
         }
       }
+      userRatingsList = new ArrayList<>(userRatingsByOrder.values());
     }
 
     @Override
     public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
-      temp_userRatingsByOrder = new HashMap<>(userRatingsByOrder);
-
-      while (values.iterator().hasNext()){
-        String[] UserRating = values.iterator().next().toString().split(":");
-        temp_userRatingsByOrder.put(Integer.parseInt(UserRating[0]), Integer.parseInt(UserRating[1]));
+      for (IntWritable value : userRatingsList){
+        value.set(0);
       }
 
-      StringBuilder strblder = new StringBuilder();
-      while (temp_userRatingsByOrder.values().iterator().hasNext()){
-				strblder.append(',' + temp_userRatingsByOrder.values().iterator().next());
-			}
+      for (Text value: values){
+        String[] UserRating = value.toString().split(":");
+        int userIndex = Integer.parseInt(UserRating[0]);
+        int rating = Integer.parseInt(UserRating[1]);
+        userRatingsByOrder.get(userIndex).set(rating);
+      }
 
-      context.write(key, new Text(strblder.toString().replaceFirst(",", "")));
+      String result = String.join(",", userRatingsList.toString());
+      context.write(key, new Text(result));
+
+      // temp_userRatingsByOrder = new HashMap<>(userRatingsByOrder);
+
+      // while (values.iterator().hasNext()){
+      //   String[] UserRating = values.iterator().next().toString().split(":");
+      //   temp_userRatingsByOrder.put(Integer.parseInt(UserRating[0]), Integer.parseInt(UserRating[1]));
+      // }
+
+      // StringBuilder strblder = new StringBuilder();
+      // while (temp_userRatingsByOrder.values().iterator().hasNext()){
+			// 	strblder.append(',' + temp_userRatingsByOrder.values().iterator().next());
+			// }
+
+      // context.write(key, new Text(strblder.toString().replaceFirst(",", "")));
     }
   }
 
