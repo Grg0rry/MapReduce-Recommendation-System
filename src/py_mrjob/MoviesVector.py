@@ -21,6 +21,7 @@ class MovieVector(MRJob):
     def mapper(self, _, line):
         line = line.strip().split('\t',1)
 
+        
         UserID, Rating = line[1].split(':')
         MovieTitle = line[0]
         UserRating = self.MovieRating.get(MovieTitle, [])
