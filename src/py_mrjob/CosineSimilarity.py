@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 
 from mrjob.job import MRJob
+from mrjob.step import MRStep
 import numpy as np
 from itertools import combinations
 
 class CosineSimilarity(MRJob):
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def mapper_init(self):
         self.Movie_Vector = {}
         self.Magnitude = {}
 
@@ -23,11 +23,19 @@ class CosineSimilarity(MRJob):
         self.Movie_Vector[MovieTitle] = Vector
         self.Magnitude[MovieTitle] = np.linalg.norm(Vector)
     
-    def reducer_final(self):
+    def reducer_2(self, _, values):
         for (MovieTitle, Vector), (Next_MovieTitle, Next_Vector) in combinations(self.Movie_Vector.items(), 2):
             dot_product = np.dot(Vector, Next_Vector)
             similarity = dot_product / (self.Magnitude[MovieTitle] * self.Magnitude[Next_MovieTitle])
             yield ((MovieTitle, Next_MovieTitle), similarity)
+
+    def steps(self):
+        return [
+            MRStep(mapper_init=self.mapper_init,
+                   mapper=self.mapper,
+                   reducer=self.reducer),
+            MRStep(reducer=self.reducer_2)
+        ]
 
 if __name__ == '__main__':
     CosineSimilarity.run()
