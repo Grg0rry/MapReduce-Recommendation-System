@@ -10,8 +10,9 @@ class MovieVector(MRJob):
         super(MovieVector, self).configure_args()
         self.add_file_arg('--file1', type=str)
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    def mapper_init(self):
         self.UserList = []
         self.MovieRating = {}
 
@@ -48,6 +49,14 @@ class MovieVector(MRJob):
         Vector = list(UserRatingsByOrder.values())
         yield (MovieTitle, Vector)
 
+    def steps(self):
+        return [
+            MRStep(mapper_init=self.mapper_init,
+                   mapper=self.mapper_get_words,
+                   combiner=self.combiner_count_words,
+                   reducer=self.reducer_count_words)
+        ]
+    
 
 if __name__ == '__main__':
     MovieVector.run()
