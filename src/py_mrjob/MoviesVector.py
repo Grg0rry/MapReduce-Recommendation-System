@@ -14,7 +14,6 @@ class MovieVector(MRJob):
     #     super().__init__(*args, **kwargs)
     def mapper_init(self):
         self.UserList = []
-        self.MovieRating = {}
 
         with open(self.options.file1, 'r') as file1:
             for line in file1:
@@ -30,15 +29,12 @@ class MovieVector(MRJob):
             UserID, Rating = pair.split(':')
             UserRating.append((int(UserID), int(Rating)))
         
-        if len(UserRating) < 1000:
-            return
-        else:
-            self.MovieRating[MovieTitle] = UserRating
-            yield MovieTitle, ""
+        if len(UserRating) >= 1000:      
+            yield MovieTitle, UserRating
 
-    def vector_reducer(self, MovieTitle, value):
-        UserRatings = self.MovieRating[MovieTitle]
-        
+
+    def vector_reducer(self, MovieTitle, UserRatings):
+                
         UserRatingsByOrder = {Order_UserID: 0 for Order_UserID in self.UserList}
 
         for UserRating in UserRatings:
@@ -51,12 +47,11 @@ class MovieVector(MRJob):
 
     def steps(self):
         return [
-            MRStep(mapper_init=self.mapper_init),
-            MRStep(mapper=self.vector_mapper),
-            MRStep(reducer=self.vector_reducer)
+            MRStep(mapper_init=self.mapper_init,
+                   mapper=self.vector_mapper,
+                   reducer=self.vector_reducer)
         ]
     
-
 if __name__ == '__main__':
     MovieVector.run()
 
