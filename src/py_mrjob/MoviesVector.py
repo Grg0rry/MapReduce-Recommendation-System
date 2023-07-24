@@ -51,9 +51,9 @@ class MovieVector(MRJob):
 
     def steps(self):
         return [
-            MRStep(mapper_init=self.mapper_init,
-                   mapper=self.vector_mapper,
-                   reducer=self.vector_reducer)
+            MRStep(mapper_init=self.mapper_init),
+            MRStep(mapper=self.vector_mapper),
+            MRStep(reducer=self.vector_reducer)
         ]
     
 
