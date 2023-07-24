@@ -19,8 +19,7 @@ class MovieVector(MRJob):
                 self.UserList.append(line[1])
 
     def mapper(self, _, line):
-        line = line.strip().split('\t',1)
-
+        line = line.strip().split('\t', 1)
         
         UserID, Rating = line[1].split(':')
         MovieTitle = line[0]
@@ -28,10 +27,10 @@ class MovieVector(MRJob):
         UserRating.append((int(UserID), int(Rating)))
         self.MovieRating[MovieTitle] = UserRating
 
-        yield (MovieTitle, (UserID, Rating))
+        yield (MovieTitle, "")
 
 
-    def reducer(self, MovieTitle, values):        
+    def reducer(self, MovieTitle, _):        
         UserRating = self.MovieRating[MovieTitle]
 
         if len(UserRating) < 1000:

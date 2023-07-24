@@ -16,5 +16,8 @@ class DataDividedByMovie(MRJob):
 
         yield(MovieTitle, f'{UserID}:{Rating}')
 
+    def reducer(self, key, values):
+        yield(key, values)
+
 if __name__ == '__main__':
     DataDividedByMovie.run()
