@@ -34,7 +34,7 @@ class MovieVector(MRJob):
         
         UserRatingsByOrder = {Order_UserID: 0 for Order_UserID in self.UserList}
 
-        for UserRating in UserRatings:
+        for UserRating in list(UserRatings):
             for UserID, Rating in UserRating:
                 if UserID in UserRatingsByOrder:
                     UserRatingsByOrder[UserID] = int(Rating)
