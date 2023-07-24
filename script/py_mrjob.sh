@@ -26,11 +26,9 @@ hadoop fs -ls results/py_mrjob/job1
 if [[ $? -ne 0 ]]; then
     time python3 DataDividedByMovie.py \
     -r hadoop $input_data \
-    --output results/job1
+    --output hdfs:///user/hadoop/results/py_mrjob/job1
     echo "task 1/4 done..."
 fi
-
-#--output hdfs:///user/hadoop/results/py_mrjob/job1
 
 # Job2: UserList
 hadoop fs -ls results/py_mrjob/job2
@@ -66,3 +64,9 @@ end=$(date +%s)
 total_time=$((end - start))
 echo "Total time taken: $total_time seconds"
 echo "-- Results in hdfs -> $output_data"
+
+
+
+python3 MoviesVector.py \
+results/job2 \
+--file1 results/job1 > results/job6

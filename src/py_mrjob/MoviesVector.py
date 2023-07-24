@@ -29,7 +29,7 @@ class MovieVector(MRJob):
 
     def reducer(self, MovieTitle, UserRating):        
 
-        if len(UserRating) < 1000:
+        if len(list(UserRating)) < 1000:
             return
         
         UserRatingsByOrder = {Order_UserID: 0 for Order_UserID in self.UserList}
