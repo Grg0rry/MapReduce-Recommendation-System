@@ -14,7 +14,7 @@ hadoop fs -rm -r results/py_mrjob
 # Check directory
 directory="/home/hadoop/recommendation-system/src/py_mrjob"
 if [[ $(pwd) != directory ]]; then
-    cd "/home/hadoop/recommendation-system/src/py_mrjob"    
+    cd $directory  
     echo "Switch directory to $directory"
 fi
 
