@@ -12,19 +12,18 @@ class MovieVector(MRJob):
     def mapper_init(self):
         self.UserList = []
 
-        
-        # with open(self.options.file1, 'r') as file1:
-        #     for line in file1:
-        #         line = line.strip().split('\t',1)
-        #         self.UserList.append(line[1])
+        with open(self.options.file1, 'r') as file1:
+            for line in file1:
+                line = line.strip().replace('"','').split('\t',1)
+                self.UserList.append(int(line[1]))
 
     def mapper(self, _, line):
-        line = line.strip().split('\t', 1)
+        line = line.strip().replace('"','').split('\t', 1)
 
         MovieTitle = str(line[0])
         UserRating = []
         for pair in line[1].strip('[]').split(','):
-            UserID, Rating = pair.strip('"').split(':')
+            UserID, Rating = pair.split(':')
             UserRating.append((int(UserID), int(Rating)))
         yield MovieTitle, UserRating
 

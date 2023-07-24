@@ -14,10 +14,10 @@ class DataDividedByMovie(MRJob):
         MovieTitle = line[0]
         Rating = int(line[2])
 
-        yield(str(MovieTitle), str(f'{UserID}:{Rating}'))
+        yield(str(MovieTitle), f'{int(UserID)}:{int(Rating)}')
 
-    # def reducer(self, key, values):
-    #     yield(key, list(values))
+    def reducer(self, key, values):
+        yield(key, list(values))
 
 if __name__ == '__main__':
     DataDividedByMovie.run()

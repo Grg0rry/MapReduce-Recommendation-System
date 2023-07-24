@@ -5,7 +5,7 @@ from mrjob.job import MRJob
 class DataDividedByMovie(MRJob):      
 
     def mapper(self, _, line):
-        line = line.strip().split("\t", 1)
+        line = line.strip().replace('"','').split("\t", 1)
 
         MovieTitle = str(line[0])
         UserID, Rating = str(line[1]).split(':')
