@@ -19,10 +19,10 @@ class CosineSimilarity(MRJob):
         for Rating in line[1].strip('[]').split(','):
             Vector.append(int(Rating))
 
-        yield(MovieTitle, np.array(Vector))
+        yield(MovieTitle, Vector)
 
     def reducer(self, MovieTitle, Vector):
-        self.Movie_Vector[MovieTitle] = Vector
+        self.Movie_Vector[MovieTitle] = np.array(Vector)
         self.Magnitude[MovieTitle] = np.linalg.norm(Vector)
     
     def reducer_final(self):
