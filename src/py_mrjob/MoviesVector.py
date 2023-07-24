@@ -2,7 +2,7 @@
 
 from mrjob.job import MRJob
 from mrjob.step import MRStep
-import pydoop.hdfs as hdfs
+# import pydoop.hdfs as hdfs
 
 class MovieVector(MRJob):
     
@@ -28,14 +28,15 @@ class MovieVector(MRJob):
         for pair in line[1].strip('[]').split(','):
             UserID, Rating = pair.split(':')
             UserRating.append((int(UserID), int(Rating)))
-        self.MovieRating[MovieTitle] = UserRating
-        yield MovieTitle, ""
+        
+        if len(UserRating) < 1000:
+            return
+        else:
+            self.MovieRating[MovieTitle] = UserRating
+            yield MovieTitle, ""
 
     def reducer(self, MovieTitle, value):
         UserRatings = self.MovieRating[MovieTitle]
-
-        if len(UserRatings) < 1000:
-            return
         
         UserRatingsByOrder = {Order_UserID: 0 for Order_UserID in self.UserList}
 
