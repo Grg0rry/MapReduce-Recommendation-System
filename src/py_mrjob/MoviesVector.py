@@ -21,7 +21,7 @@ class MovieVector(MRJob):
                 line = line.strip().replace('"','').split('\t',1)
                 self.UserList.append(int(line[1]))
 
-    def mapper(self, _, line):
+    def vector_mapper(self, _, line):
         line = line.strip().replace('"','').split('\t', 1)
 
         MovieTitle = str(line[0])
@@ -36,7 +36,7 @@ class MovieVector(MRJob):
             self.MovieRating[MovieTitle] = UserRating
             yield MovieTitle, ""
 
-    def reducer(self, MovieTitle, value):
+    def vector_reducer(self, MovieTitle, value):
         UserRatings = self.MovieRating[MovieTitle]
         
         UserRatingsByOrder = {Order_UserID: 0 for Order_UserID in self.UserList}
@@ -52,9 +52,8 @@ class MovieVector(MRJob):
     def steps(self):
         return [
             MRStep(mapper_init=self.mapper_init,
-                   mapper=self.mapper_get_words,
-                   combiner=self.combiner_count_words,
-                   reducer=self.reducer_count_words)
+                   mapper=self.vector_mapper,
+                   reducer=self.vector_reducer)
         ]
     
 
