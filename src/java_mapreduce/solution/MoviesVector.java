@@ -57,7 +57,7 @@ public class MoviesVector {
       String[] line = value.toString().split("\t", 2);
       String movieTitle = line[0];
       String userRatingStr = line[1];
-      String[] userRatingsArray = userRatingsStr.substring(1, userRatingsStr.length() - 1).split(", ");
+      String[] userRatingsArray = userRatingsStr.split(", ");
       List<String> userRatingPairs = new ArrayList<>();
 
       for (String pair : userRatingsArray){
