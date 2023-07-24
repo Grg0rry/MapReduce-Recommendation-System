@@ -86,7 +86,7 @@ public class MoviesVector extends Configured implements Tool {
       
       for (Text value : values) {
         String userRatingsStr = value.toString();
-        String[] userRatingsArray = userRatingsStr.substring(1, userRatingsStr.length() - 1).split(", ");
+        String[] userRatingsArray = userRatingsStr.split(", ");
         for (String pair : userRatingsArray) {
           String[] parts = pair.split(":");
           int userId = Integer.parseInt(parts[0]);
