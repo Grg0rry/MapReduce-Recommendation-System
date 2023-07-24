@@ -26,9 +26,11 @@ hadoop fs -ls results/py_mrjob/job1
 if [[ $? -ne 0 ]]; then
     time python3 DataDividedByMovie.py \
     -r hadoop $input_data \
-    --output hdfs:///user/hadoop/results/py_mrjob/job1
+    --output results/job1
     echo "task 1/4 done..."
 fi
+
+#--output hdfs:///user/hadoop/results/py_mrjob/job1
 
 # Job2: UserList
 hadoop fs -ls results/py_mrjob/job2
