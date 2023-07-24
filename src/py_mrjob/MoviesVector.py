@@ -27,16 +27,17 @@ class MovieVector(MRJob):
             UserRating.append((int(UserID), int(Rating)))
         yield MovieTitle, UserRating
 
-    def reducer(self, MovieTitle, UserRating):        
+    def reducer(self, MovieTitle, UserRatings):        
 
-        if len(list(UserRating)) < 1000:
+        if len(list(UserRatings)) < 1000:
             return
         
         UserRatingsByOrder = {Order_UserID: 0 for Order_UserID in self.UserList}
 
-        for UserID, Rating in UserRating:
-            if UserID in UserRatingsByOrder:
-                UserRatingsByOrder[UserID] = int(Rating)
+        for UserRating in UserRatings:
+            for UserID, Rating in UserRating:
+                if UserID in UserRatingsByOrder:
+                    UserRatingsByOrder[UserID] = int(Rating)
 
         Vector = list(UserRatingsByOrder.values())
         yield (MovieTitle, Vector)
