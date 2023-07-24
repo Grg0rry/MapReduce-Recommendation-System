@@ -73,7 +73,7 @@ public class MoviesVector {
 				strblder.append(',' + temp_userRatingsByOrder.values().iterator().next());
 			}
 
-      context.write(key, new Text(strblder.toString().replaceFirst(',', '')));
+      context.write(key, new Text(strblder.toString().replaceFirst(",", "")));
     }
   }
 
