@@ -15,7 +15,7 @@ class MovieVector(MRJob):
         self.UserList = []
         self.MovieRating = {}
 
-        with hdfs.open(self.options.file1, 'r') as file1:
+        with open(self.options.file1, 'r') as file1:
             for line in file1:
                 line = line.strip().replace('"','').split('\t',1)
                 self.UserList.append(int(line[1]))

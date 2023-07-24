@@ -40,6 +40,8 @@ if [[ $? -ne 0 ]]; then
 fi
 
 # Job3: MoviesVector
+hadoop fs -
+
 hadoop fs -ls results/py_mrjob/job3
 if [[ $? -ne 0 ]]; then
     time python3 MoviesVector.py \
