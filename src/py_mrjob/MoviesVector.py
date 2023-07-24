@@ -7,15 +7,16 @@ class MovieVector(MRJob):
     
     def configure_args(self):
         super(MovieVector, self).configure_args()
-        self.add_file_arg('--file1')
+        self.add_file_arg('--file1', type=str)
 
     def mapper_init(self):
         self.UserList = []
 
-        with open(self.options.file1, 'r') as file1:
-            for line in file1:
-                line = line.strip().split('\t',1)
-                self.UserList.append(line[1])
+        
+        # with open(self.options.file1, 'r') as file1:
+        #     for line in file1:
+        #         line = line.strip().split('\t',1)
+        #         self.UserList.append(line[1])
 
     def mapper(self, _, line):
         line = line.strip().split('\t', 1)
