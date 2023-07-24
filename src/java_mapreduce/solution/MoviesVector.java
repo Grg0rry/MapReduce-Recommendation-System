@@ -63,9 +63,8 @@ public class MoviesVector {
     public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
       temp_userRatingsByOrder = new HashMap<>(userRatingsByOrder);
 
-      String[] ratingPair = values.split(",");
-      for (String rp: ratingPair) {
-        String[] rating = rp.split(":");
+      for (String UserRating: values){
+        String[] rating = UserRating.split(":");
         temp_userRatingsByOrder.put(Integer.parseInt(rating[0]), Integer.parseInt(rating[1]));
       }
 
