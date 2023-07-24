@@ -44,8 +44,8 @@ hadoop fs -ls results/py_mrjob/job3
 if [[ $? -ne 0 ]]; then
     time python3 MoviesVector.py \
     -r hadoop \
-    --job1 hdfs:///user/hadoop/results/py_mrjob/job1/part* \
-    --job2 hdfs:///user/hadoop/results/py_mrjob/job2/part* \
+    hdfs:///user/hadoop/results/py_mrjob/job1/part* \
+    --file1 hdfs:///user/hadoop/results/py_mrjob/job2/part* \
     --output hdfs:///user/hadoop/results/py_mrjob/job3
     echo "task 3/4 done..."
 fi
