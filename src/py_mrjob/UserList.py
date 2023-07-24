@@ -14,9 +14,7 @@ class UserList(MRJob):
         yield(UserID, "")
 
     def reducer(self, key, values):
-        UserID = int(key)
-
-        yield("$User_List", UserID)
+        yield(str("$User_List"), int(key))
 
 if __name__ == '__main__':
     UserList.run()
