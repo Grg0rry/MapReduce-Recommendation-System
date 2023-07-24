@@ -61,7 +61,7 @@ public class MoviesVector {
     }
 
     @Override
-    public void reduce(Text key, Text values, Context context) throws IOException, InterruptedException {
+    public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
       temp_userRatingsByOrder = new HashMap<>(userRatingsByOrder);
 
       String[] ratingPair = values.split(",");
