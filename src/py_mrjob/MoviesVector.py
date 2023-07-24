@@ -23,7 +23,7 @@ class MovieVector(MRJob):
         MovieTitle = str(line[0])
         UserRating = []
         for pair in line[1].strip('[]').split(','):
-            UserID, Rating = pair.split(':')
+            UserID, Rating = pair.strip('"').split(':')
             UserRating.append((int(UserID), int(Rating)))
         yield MovieTitle, UserRating
 
