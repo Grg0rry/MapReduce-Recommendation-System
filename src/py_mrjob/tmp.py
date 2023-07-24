@@ -8,7 +8,7 @@ class DataDividedByMovie(MRJob):
         line = line.strip().split("\t", 2)
 
         MovieTitle = str(line[0])
-        UserID, Rating = line[1].split(':')
+        UserID, Rating = str(line[1]).split(':')
 
         yield UserID, int(Rating)
 
