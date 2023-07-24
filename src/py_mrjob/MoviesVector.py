@@ -14,12 +14,13 @@ class MovieVector(MRJob):
         if line[0].startswith("$User_List"):
             self.UserList.append(line[1])
         else:
-            yield (line[0], line[1])
+            UserID, Rating = line[1].split(":")
+            MovieTitle = line[0]
+            yield (MovieTitle, (UserID, Rating))
 
-    def reducer(self, key, values):
-
-        MovieTitle = key
-        UserRating = list((value.strip("[]").split(':') for value in values))
+    def reducer(self, MovieTitle, values):
+        
+        UserRating = list(values)
 
         if len(UserRating) < 1000:
             return
