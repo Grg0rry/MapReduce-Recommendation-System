@@ -20,8 +20,11 @@ class MovieVector(MRJob):
     def mapper(self, _, line):
         line = line.strip().split('\t', 1)
 
-        MovieTitle = line[0]
-        UserRating = [(int(UserID), int(Rating)) for UserID, Rating in (pair.split(':') for pair in line[1].strip('[]').split(','))]
+        MovieTitle = str(line[0])
+        UserRating = []
+        for pair in line[1].strip('[]').split(','):
+            UserID, Rating = pair.split(':')
+            UserRating.append((int(UserID), int(Rating)))
         yield MovieTitle, UserRating
 
     def reducer(self, MovieTitle, UserRating):        
