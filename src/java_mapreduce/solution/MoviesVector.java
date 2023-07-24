@@ -32,12 +32,11 @@ public class MoviesVector {
     
     @Override
     public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
-      String[] line = value.toString().split("\t", 2);
+      String[] line = value.toString().trim().split("\t", 2);
+      String[] userRating = line[1].split(",");
 
-      String movieTitle = line[0];
-
-      for (String userRating: line[1].split(",")){
-        context.write(new Text(movieTitle), Text(userRating.toString()));
+      for (int i=0; i < userRating.length; i++){
+        context.write(new Text(line[0]), Text(userRating[i]));
       }
     }
   }
