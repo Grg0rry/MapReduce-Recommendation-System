@@ -34,9 +34,8 @@ public class MoviesVector {
     @Override
     protected void setup(Context context) throws IOException, InterruptedException {
       userList = new ArrayList<>();
-      Path[] cacheFiles = context.getLocalCacheFiles();
 
-      try (BufferedReader reader = new BufferedReader(new FileReader(cacheFiles[0].toString()))) {
+      try (BufferedReader reader = new BufferedReader(new FileReader(context.getCacheFiles[0].toString()))) {
         String line;
         while ((line = reader.readLine()) != null) {
           String[] tokens = line.split("\t", 2);
