@@ -60,12 +60,12 @@ public class MoviesVector {
     }
 
     @Override
-    public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
+    public void reduce(Text key, Iterable<javax.xml.soap.Text> values, Context context) throws IOException, InterruptedException {
       temp_userRatingsByOrder = new HashMap<>(userRatingsByOrder);
 
-      for (String UserRating: values){
-        String[] rating = UserRating.split(":");
-        temp_userRatingsByOrder.put(Integer.parseInt(rating[0]), Integer.parseInt(rating[1]));
+      while (values.iterator().hasNext()){
+        String[] UserRating = values.iterator().next().toString().split(":");
+        temp_userRatingsByOrder.put(Integer.parseInt(UserRating[0]), Integer.parseInt(UserRating[1]));
       }
 
       List<Integer> vector = new ArrayList<>(temp_userRatingsByOrder.values());
