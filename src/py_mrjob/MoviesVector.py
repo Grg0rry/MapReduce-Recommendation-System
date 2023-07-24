@@ -11,6 +11,7 @@ class MovieVector(MRJob):
 
     def mapper_init(self):
         self.UserList = []
+        self.MovieRating = {}
 
         with open(self.options.file1, 'r') as file1:
             for line in file1:
@@ -25,16 +26,18 @@ class MovieVector(MRJob):
         for pair in line[1].strip('[]').split(','):
             UserID, Rating = pair.split(':')
             UserRating.append((int(UserID), int(Rating)))
-        yield MovieTitle, UserRating
+        self.MovieRating[MovieTitle] = UserRating
+        yield MovieTitle, _
 
-    def reducer(self, MovieTitle, UserRatings):        
+    def reducer(self, MovieTitle, _):        
+        UserRatings = self.MovieRating[MovieTitle]
 
-        if len(list(UserRatings)) < 1000:
+        if len(UserRatings) < 1000:
             return
         
         UserRatingsByOrder = {Order_UserID: 0 for Order_UserID in self.UserList}
 
-        for UserRating in list(UserRatings):
+        for UserRating in UserRatings:
             for UserID, Rating in UserRating:
                 if UserID in UserRatingsByOrder:
                     UserRatingsByOrder[UserID] = int(Rating)
