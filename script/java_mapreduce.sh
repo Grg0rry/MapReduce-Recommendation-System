@@ -46,10 +46,14 @@ fi
 # Job3: MoviesVector
 hadoop fs -ls results/java_mapreduce/job3
 if [[ $? -ne 0 ]]; then
+
+
     time hadoop jar javamr.jar solution.MoviesVector \
     results/java_mapreduce/job2/part-r-00000 results/java_mapreduce/job1/part-r-00000 \
     results/java_mapreduce/job3
     echo "task 3/4 done..."
+
+    rm temp
 fi
 
 # Job4: CosineSimilarity

@@ -42,7 +42,7 @@ fi
 # Job3: MoviesVector
 hadoop fs -ls results/py_mrjob/job3
 if [[ $? -ne 0 ]]; then
-    hadoop fs -get temp results/py_mrjob/job2/part-00000
+    hadoop fs -get results/py_mrjob/job2/part-00000 temp
 
     time python3 MoviesVector.py \
     -r hadoop \
