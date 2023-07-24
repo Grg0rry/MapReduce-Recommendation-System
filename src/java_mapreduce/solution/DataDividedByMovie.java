@@ -33,6 +33,21 @@ public class DataDividedByMovie {
     }
   }
 
+  /* Reducer */
+  public static class DataDividedByMovieReducer extends Reducer<Text, Text, Text, Text> {
+
+    @Override
+    public void reduce(Text key, Iterable<javax.xml.soap.Text> values, Context context) throws IOException, InterruptedException {
+      
+      StringBuilder strblder = new StringBuilder();
+      while (values.iterator().hasNext()){
+        strblder.append(','+values.iterator().next());
+      }
+      
+      context.write(key, new Text(strblder.toString().replaceFirst(',','')));
+    }
+  }
+
   /* Driver */
   public static void main(String[] args) throws Exception {
 
@@ -51,6 +66,7 @@ public class DataDividedByMovie {
     FileOutputFormat.setOutputPath(job, new Path(args[1]));
 
     job.setMapperClass(DataDividedByMovieMapper.class);
+    job.setMapperClass(DataDividedByMovieReducer.class);
     
     job.setMapOutputKeyClass(Text.class);
 		job.setMapOutputValueClass(Text.class);

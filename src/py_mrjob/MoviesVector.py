@@ -7,7 +7,7 @@ class MovieVector(MRJob):
     
     def configure_args(self):
         super(MovieVector, self).configure_args()
-        self.add_file_arg('--file1', type=str)
+        self.add_file_arg('--file1', required=True, type=str)
 
     def userlist(self):
         self.UserList = []
@@ -26,7 +26,7 @@ class MovieVector(MRJob):
             UserID, Rating = pair.split(':')
             UserRating.append((int(UserID), int(Rating)))
         
-        if len(UserRating) >= 1000:      
+        if len(UserRating) >= 1000:
             yield MovieTitle, UserRating
 
     def reducer(self, MovieTitle, UserRatings):
