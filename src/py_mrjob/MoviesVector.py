@@ -12,7 +12,7 @@ class MovieVector(MRJob):
 
     # def __init__(self, *args, **kwargs):
     #     super().__init__(*args, **kwargs)
-    def mapper_init(self):
+    def userlist(self):
         self.UserList = []
 
         with open(self.options.file1, 'r') as file1:
@@ -20,7 +20,7 @@ class MovieVector(MRJob):
                 line = line.strip().replace('"','').split('\t',1)
                 self.UserList.append(int(line[1]))
 
-    def vector_mapper(self, _, line):
+    def mapper(self, _, line):
         line = line.strip().replace('"','').split('\t', 1)
 
         MovieTitle = str(line[0])
@@ -33,7 +33,7 @@ class MovieVector(MRJob):
             yield MovieTitle, UserRating
 
 
-    def vector_reducer(self, MovieTitle, UserRatings):
+    def reducer(self, MovieTitle, UserRatings):
                 
         UserRatingsByOrder = {Order_UserID: 0 for Order_UserID in self.UserList}
 
@@ -47,9 +47,9 @@ class MovieVector(MRJob):
 
     def steps(self):
         return [
-            MRStep(mapper_init=self.mapper_init,
-                   mapper=self.vector_mapper,
-                   reducer=self.vector_reducer)
+            MRStep(mapper=self.mapper,
+                   reducer_init=self.userlist,
+                   reducer=self.reducer)
         ]
     
 if __name__ == '__main__':
