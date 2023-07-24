@@ -68,9 +68,7 @@ public class MoviesVector {
         String[] ratingPair = ratingPairs_str.split(",");
         for (String rp: ratingPair) {
           String[] rating = rp.split(":");
-          temp_userRatingsByOrder.put(
-            Integer.parseInt(rating[0]), Integer.parseInt(rating[1])
-          )
+          temp_userRatingsByOrder.put(Integer.parseInt(rating[0]), Integer.parseInt(rating[1]));
         }
       }
 
