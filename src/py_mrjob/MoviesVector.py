@@ -10,8 +10,10 @@ class MovieVector(MRJob):
         super(MovieVector, self).configure_args()
         self.add_file_arg('--file1', type=str)
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    
+    def mapper_init(self):
         self.UserList = []
         self.MovieRating = {}
 
