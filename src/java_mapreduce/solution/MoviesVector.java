@@ -21,6 +21,7 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.hadoop.util.Tool;
@@ -45,12 +46,12 @@ public class MoviesVector {
   /* Reducer */
   public static class MoviesVectorReducer extends Reducer<Text, Text, Text, Text> {
 
-    private Map<Integer, Integer> userRatingsByOrder;
-    private List<IntWritable> userRatingsList;
+    private TreeMap<Integer, Integer> template_userRatings;
+    private StringBuffer strblder;
 
     @Override
     protected void setup(Context context) throws IOException, InterruptedException {
-      userRatingsByOrder = new HashMap<>();
+      template_userRatings = new TreeMap<>();
 
       URI[] cacheFiles = context.getCacheFiles();
       Path cachedFilePath = new Path(cacheFiles[0]);
@@ -58,41 +59,29 @@ public class MoviesVector {
         String line;
         while ((line = reader.readLine()) != null) {
           String[] tokens = line.split("\t", 2);
-          userRatingsByOrder.put(Integer.parseInt(tokens[1]), 0);
+          template_userRatings.put(Integer.parseInt(tokens[1]), 0);
         }
       }
-      userRatingsList = new ArrayList<>(userRatingsByOrder.values());
+      strblder = new StringBuffer();
     }
 
     @Override
     public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
-      for (IntWritable value : userRatingsList){
-        value.set(0);
-      }
+      TreeMap <Integer, Integer> userRatingsByOrder = new TreeMap<>(template_userRatings);
 
-      for (Text value: values){
-        String[] UserRating = value.toString().split(":");
-        int userIndex = Integer.parseInt(UserRating[0]);
+      for (Text userRating : values) {
+        String[] UserRating = userRating.toString().split(":");
+        int userID = Integer.parseInt(UserRating[0]);
         int rating = Integer.parseInt(UserRating[1]);
-        userRatingsByOrder.get(userIndex).set(rating);
+
+        userRatingsByOrder.put(userID, rating);
       }
 
-      String result = String.join(",", userRatingsList.toString());
-      context.write(key, new Text(result));
+      for (Integer rating: userRatingsByOrder.values()){
+        strblder.append("," + rating);
+      }
 
-      // temp_userRatingsByOrder = new HashMap<>(userRatingsByOrder);
-
-      // while (values.iterator().hasNext()){
-      //   String[] UserRating = values.iterator().next().toString().split(":");
-      //   temp_userRatingsByOrder.put(Integer.parseInt(UserRating[0]), Integer.parseInt(UserRating[1]));
-      // }
-
-      // StringBuilder strblder = new StringBuilder();
-      // while (temp_userRatingsByOrder.values().iterator().hasNext()){
-			// 	strblder.append(',' + temp_userRatingsByOrder.values().iterator().next());
-			// }
-
-      // context.write(key, new Text(strblder.toString().replaceFirst(",", "")));
+      context.write(key, new Text(strblder.toString().replaceFirst(",", "")));
     }
   }
 
