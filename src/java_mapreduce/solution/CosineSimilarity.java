@@ -44,7 +44,7 @@ public class CosineSimilarity {
         private Map<String, Double> magnitudeMap = new HashMap<>();
 
         @Override
-        protected void reduce(javax.xml.soap.Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
+        public void reduce(javax.xml.soap.Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
             List<Integer> movieVector = new ArrayList<>();
 
             for (IntWritable value: values){
