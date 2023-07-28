@@ -15,17 +15,11 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
-import java.util.ArrayList;
-import java.util.List;
-import org.apache.hadoop.util.Tool;
-import org.apache.hadoop.util.ToolRunner;
 
 
 public class MoviesVector {
@@ -45,13 +39,12 @@ public class MoviesVector {
 
   /* Reducer */
   public static class MoviesVectorReducer extends Reducer<Text, Text, Text, Text> {
-
-    private TreeMap<Integer, Integer> template_userRatings;
-    private StringBuffer strblder;
+    
+    private Map<Integer, Integer> read_userRatings;
 
     @Override
     protected void setup(Context context) throws IOException, InterruptedException {
-      template_userRatings = new TreeMap<>();
+      read_userRatings = new HashMap<>();
 
       URI[] cacheFiles = context.getCacheFiles();
       Path cachedFilePath = new Path(cacheFiles[0]);
@@ -59,25 +52,25 @@ public class MoviesVector {
         String line;
         while ((line = reader.readLine()) != null) {
           String[] tokens = line.split("\t", 2);
-          template_userRatings.put(Integer.parseInt(tokens[1]), 0);
+          read_userRatings.put(Integer.parseInt(tokens[1]), 0);
         }
       }
-      strblder = new StringBuffer();
     }
 
     @Override
     public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
-      TreeMap <Integer, Integer> userRatingsByOrder = new TreeMap<>(template_userRatings);
+      Map<Integer, Integer> write_userRatings = new HashMap<>(read_userRatings);
+      StringBuffer strblder = new StringBuffer();
 
       for (Text userRating : values) {
         String[] UserRating = userRating.toString().split(":");
         int userID = Integer.parseInt(UserRating[0]);
         int rating = Integer.parseInt(UserRating[1]);
 
-        userRatingsByOrder.put(userID, rating);
+        write_userRatings.put(userID, rating);
       }
 
-      for (Integer rating: userRatingsByOrder.values()){
+      for (Integer rating: write_userRatings.values()){
         strblder.append("," + rating);
       }
 
@@ -107,4 +100,26 @@ public class MoviesVector {
           
     job.waitForCompletion(true);
   }
+}
+
+
+private List<KeyValuePair<Integer, Integer>> read_userRatings;
+private List<KeyValuePair<Integer, Integer>> write_userRatings;
+
+public class KeyValuePair<K, V> {
+    private K key;
+    private V value;
+
+    public KeyValuePair(K key, V value) {
+        this.key = key;
+        this.value = value;
+    }
+
+    public K getKey() {
+        return key;
+    }
+
+    public V getValue() {
+        return value;
+    }
 }
