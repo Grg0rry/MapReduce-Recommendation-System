@@ -105,7 +105,7 @@ public class CosineSimilarity {
         job.setReducerClass(CosineSimilarityReducer.class);
 
         job.setMapOutputKeyClass(Text.class);
-		job.setMapOutputValueClass(Text.class);
+		job.setMapOutputValueClass(IntWritable.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(DoubleWritable.class);
 

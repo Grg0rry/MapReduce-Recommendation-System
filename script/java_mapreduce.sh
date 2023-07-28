@@ -53,6 +53,7 @@ if [[ $? -ne 0 ]]; then
 fi
 
 # Job4: CosineSimilarity
+output_data="results/java_mapreduce/output"
 hadoop fs -ls results/java_mapreduce/job4
 if [[ $? -ne 0 ]]; then
     time hadoop jar javamr.jar solution.CosineSimilarity \
