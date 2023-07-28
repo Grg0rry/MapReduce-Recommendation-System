@@ -18,9 +18,6 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
-import org.nd4j.linalg.api.ndarray.INDArray;
-import org.nd4j.linalg.factory.Nd4j;
-
 
 public class CosineSimilarity extends Configured implements Tool {
 
@@ -56,25 +53,33 @@ public class CosineSimilarity extends Configured implements Tool {
             }
             movieVectorMap.put(key, movieVector);
 
-            double magnitude = Nd4j.create(movieVector).norm2Number().doubleValue();
-            magnitudeMap.put(key, magnitude);
+            double magnitude = 0;
+            for (int vector : movieVector) {
+                magnitude += vector * vector;
+            }
+            magnitude = Math.sqrt(magnitude);
+            magnitudeMap.put(key.toString(), magnitude);
         }
 
         @Override
         protected void cleanup(Context context) throws IOException, InterruptedException {
             for (Map.Entry<String, List<Integer>> entry1 : movieVectorMap.entrySet()) {
                 String movieTitle1 = entry1.getKey();
-                INDArray vector1 = Nd4j.create(entry1.getValue());
+                List<Integer> vector1 = entry1.getValue();
                 double magnitude1 = magnitudeMap.get(movieTitle1);
-                
+
                 for (Map.Entry<String, List<Integer>> entry2 : movieVectorMap.entrySet()) {
                     String movieTitle2 = entry2.getKey();
-                    INDArray vector2 = Nd4j.create(entry2.getValue());
+                    List<Integer> vector2 = entry2.getValue();
                     double magnitude2 = magnitudeMap.get(movieTitle2);
-                    
-                    double dotProduct = vector1.mmul(vector2.transpose()).getDouble(0, 0);
+
+                    double dotProduct = 0;
+                    for (int i = 0; i < vector1.size(); i++) {
+                        dotProduct += vector1.get(i) * vector2.get(i);
+                    }
+
                     double similarity = dotProduct / (magnitude1 * magnitude2);
-                    context.write(new Text(movieTitle1.toString()+","+movieTitle2.toString()), new DoubleWritable(similarity));
+                    context.write(new Text("(" + movieTitle1 + "," + movieTitle2 + ")"), new DoubleWritable(similarity));
                 }
             }
         }
