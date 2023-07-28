@@ -16,11 +16,9 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
-import org.apache.hadoop.util.Tool;
-import org.apache.hadoop.util.ToolRunner;
 
 
-public class CosineSimilarity extends Configured implements Tool {
+public class CosineSimilarity {
 
     /* Mapper */
     public static class CosineSimilarityMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
