@@ -46,13 +46,13 @@ public class CosineSimilarity extends Configured implements Tool {
         private Map<String, Double> magnitudeMap = new HashMap<>();
 
         @Override
-        protected void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
+        protected void reduce(javax.xml.soap.Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
             List<Integer> movieVector = new ArrayList<>();
 
             for (IntWritable value: values){
                 movieVector.add(value.get());
             }
-            movieVectorMap.put(key, movieVector);
+            movieVectorMap.put(key.toString(), movieVector);
 
             double magnitude = 0;
             for (int vector : movieVector) {
