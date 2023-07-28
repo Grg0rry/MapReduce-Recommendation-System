@@ -101,25 +101,3 @@ public class MoviesVector {
     job.waitForCompletion(true);
   }
 }
-
-
-private List<KeyValuePair<Integer, Integer>> read_userRatings;
-private List<KeyValuePair<Integer, Integer>> write_userRatings;
-
-public class KeyValuePair<K, V> {
-    private K key;
-    private V value;
-
-    public KeyValuePair(K key, V value) {
-        this.key = key;
-        this.value = value;
-    }
-
-    public K getKey() {
-        return key;
-    }
-
-    public V getValue() {
-        return value;
-    }
-}
