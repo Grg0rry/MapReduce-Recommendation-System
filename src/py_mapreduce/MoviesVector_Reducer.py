@@ -19,12 +19,11 @@ for line in sys.stdin:
         else:
             MovieRating[MovieTitle] = [(int(UserID), int(Rating))]
 
-for MovieTitle, UserRating in MovieRating.items():  
-    UserRatingsByOrder = {Order_UserID: 0 for Order_UserID in UserList}
+for MovieTitle, UserRating in MovieRating.items():
+    UserRatingsByOrder = {UserID: 0 for UserID in UserList}
 
     for UserID, Rating in UserRating:
-        if UserID in UserRatingsByOrder:
-            UserRatingsByOrder[UserID] = Rating
+        UserRatingsByOrder[UserID] = Rating
     
     Vector = list(UserRatingsByOrder.values())
     print('%s\t%s' % (MovieTitle, Vector))
