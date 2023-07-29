@@ -19,7 +19,8 @@ for line in sys.stdin:
         else:
             MovieRating[MovieTitle] = [(int(UserID), int(Rating))]
 
-        print('%s\t%s' % (MovieTitle, MovieRating[MovieTitle]))
+for MovieTitle, UserRating in MovieRating.items():  
+    print('%s\t%s' % (MovieTitle, UserRating))
 
 # for MovieTitle, UserRating in MovieRating.items():  
 #     UserRatingsByOrder = {Order_UserID: 0 for Order_UserID in UserList}
