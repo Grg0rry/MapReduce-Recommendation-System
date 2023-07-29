@@ -19,7 +19,7 @@ for line in sys.stdin:
     print('%s\t%s' % (MovieTitle, Magnitude[MovieTitle]))
 
 
-for (MovieTitle, Vector), (Next_MovieTitle, Next_Vector) in combinations(Movie_Vector.items(), 2):
-    dot_product = np.dot(Vector, Next_Vector)
-    similarity = dot_product / (Magnitude[MovieTitle] * Magnitude[Next_MovieTitle])
-    print('%s\t%s' % ((MovieTitle, Next_MovieTitle), similarity))
+# for (MovieTitle, Vector), (Next_MovieTitle, Next_Vector) in combinations(Movie_Vector.items(), 2):
+#     dot_product = np.dot(Vector, Next_Vector)
+#     similarity = dot_product / (Magnitude[MovieTitle] * Magnitude[Next_MovieTitle])
+#     print('%s\t%s' % ((MovieTitle, Next_MovieTitle), similarity))
