@@ -16,6 +16,9 @@ for line in sys.stdin:
     Movie_Vector[MovieTitle] = Vector
     Magnitude[MovieTitle] = np.linalg.norm(Vector)
 
+    print('%s\t%s' % (MovieTitle, Magnitude[MovieTitle]))
+
+
 for (MovieTitle, Vector), (Next_MovieTitle, Next_Vector) in combinations(Movie_Vector.items(), 2):
     dot_product = np.dot(Vector, Next_Vector)
     similarity = dot_product / (Magnitude[MovieTitle] * Magnitude[Next_MovieTitle])
