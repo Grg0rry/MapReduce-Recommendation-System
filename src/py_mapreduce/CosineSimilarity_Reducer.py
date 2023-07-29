@@ -11,12 +11,13 @@ for line in sys.stdin:
     line = line.strip().split('\t', 1)
 
     MovieTitle = line[0]
-    # Vector = [int(item.strip()) for item in line[1].strip('[]').split(',')]
-    Vector = np.array([int(item.strip()) for item in line[1].strip('[]').split(',')])
-    Magnitude[MovieTitle] = np.linalg.norm(Vector)
+    Vector = [int(item.strip()) for item in line[1].strip('[]').split(',')]
+    
+    # Vector = np.array([int(item.strip()) for item in line[1].strip('[]').split(',')])
+    # Magnitude[MovieTitle] = np.linalg.norm(Vector)
     
     Movie_Vector[MovieTitle] = Vector
-    # Magnitude[MovieTitle] = sum(component ** 2 for component in Vector) ** 0.5
+    Magnitude[MovieTitle] = sum(component ** 2 for component in Vector) ** 0.5
 
 # for i, (MovieTitle_1, Vector_1) in enumerate(Movie_Vector.items()):
 #     for MovieTitle_2, Vector_2 in list(Movie_Vector.items())[i + 1:]:
