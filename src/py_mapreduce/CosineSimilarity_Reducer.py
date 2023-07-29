@@ -16,7 +16,7 @@ for line in sys.stdin:
     # Magnitude[MovieTitle] = np.linalg.norm(Vector)
 
     Movie_Vector[MovieTitle] = Vector
-    Magnitude[MovieTitle] = sum(val * val for val in Vector)
+    Magnitude[MovieTitle] = sum(component ** 2 for component in Vector) ** 0.5
     
     print('%s\t%s' % (MovieTitle, Magnitude[MovieTitle]))
 

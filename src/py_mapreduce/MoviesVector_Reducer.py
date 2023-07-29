@@ -13,8 +13,11 @@ for line in sys.stdin:
     else:
         UserID, Rating = line[1].split(':')
         MovieTitle = line[0]
-        UserRating = MovieRating.get(MovieTitle, [])
-        UserRating.append((int(UserID), int(Rating)))
+
+        if MovieTitle in MovieRating:
+            UserRating.append((int(UserID), int(Rating)))
+        else:
+            UserRating = [(int(UserID), int(Rating))]
         MovieRating[MovieTitle] = UserRating
 
 for MovieTitle, UserRating in MovieRating.items():  
@@ -27,4 +30,8 @@ for MovieTitle, UserRating in MovieRating.items():
     Vector = list(UserRatingsByOrder.values())
     print('%s\t%s' % (MovieTitle, Vector))
 
+
+# UserRating = MovieRating.get(MovieTitle, [])
+# UserRating.append((int(UserID), int(Rating)))
+# MovieRating[MovieTitle] = UserRating
 
