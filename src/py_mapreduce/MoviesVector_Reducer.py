@@ -20,15 +20,17 @@ for line in sys.stdin:
             UserRating = [(int(UserID), int(Rating))]
         MovieRating[MovieTitle] = UserRating
 
-for MovieTitle, UserRating in MovieRating.items():  
-    UserRatingsByOrder = {Order_UserID: 0 for Order_UserID in UserList}
+    print('%s\t%s' % (MovieTitle, MovieRating[MovieTitle]))
 
-    for UserID, Rating in UserRating:
-        if UserID in UserRatingsByOrder:
-            UserRatingsByOrder[UserID] = Rating
+# for MovieTitle, UserRating in MovieRating.items():  
+#     UserRatingsByOrder = {Order_UserID: 0 for Order_UserID in UserList}
+
+#     for UserID, Rating in UserRating:
+#         if UserID in UserRatingsByOrder:
+#             UserRatingsByOrder[UserID] = Rating
     
-    Vector = list(UserRatingsByOrder.values())
-    print('%s\t%s' % (MovieTitle, Vector))
+#     Vector = list(UserRatingsByOrder.values())
+#     print('%s\t%s' % (MovieTitle, Vector))
 
 
 # UserRating = MovieRating.get(MovieTitle, [])
