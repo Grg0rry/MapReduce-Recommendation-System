@@ -17,10 +17,7 @@ for line in sys.stdin:
         UserRating.append((int(UserID), int(Rating)))
         MovieRating[MovieTitle] = UserRating
 
-for MovieTitle, UserRating in MovieRating.items():
-    # if len(UserRating) < 1000:
-    #     continue
-    
+for MovieTitle, UserRating in MovieRating.items():  
     UserRatingsByOrder = {Order_UserID: 0 for Order_UserID in UserList}
 
     for UserID, Rating in UserRating:

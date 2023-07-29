@@ -27,9 +27,6 @@ class MovieVector(MRJob):
             UserRating.append((int(UserID), int(Rating)))
         yield MovieTitle, UserRating
         
-        # if len(UserRating) >= 1000:
-        #     yield MovieTitle, UserRating
-
     def reducer(self, MovieTitle, UserRatings):
         UserRatingsByOrder = {Order_UserID: 0 for Order_UserID in self.UserList}
 
