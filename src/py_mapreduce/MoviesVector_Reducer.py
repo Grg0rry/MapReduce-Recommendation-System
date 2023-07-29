@@ -24,7 +24,8 @@ for MovieTitle, UserRating in MovieRating.items():
     UserRatingsByOrder = {UserID: 0 for UserID in UserList}
 
     for UserID, Rating in UserRating:
-        UserRatingsByOrder[UserID] = Rating
+        if UserID in UserRatingsByOrder:
+            UserRatingsByOrder[UserID] = Rating
     
     Vector = list(UserRatingsByOrder.values())
     print('%s\t%s' % (MovieTitle, Vector))
