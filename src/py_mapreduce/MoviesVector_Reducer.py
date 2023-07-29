@@ -18,8 +18,8 @@ for line in sys.stdin:
         MovieRating[MovieTitle] = UserRating
 
 for MovieTitle, UserRating in MovieRating.items():
-    if len(UserRating) < 1000:
-        continue
+    # if len(UserRating) < 1000:
+    #     continue
     
     UserRatingsByOrder = {Order_UserID: 0 for Order_UserID in UserList}
 
