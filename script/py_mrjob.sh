@@ -55,7 +55,7 @@ if [[ $? -ne 0 ]]; then
 fi
 
 # Job4: CosineSimilarity
-hadoop fs -ls results/py_mrjob/job4
+hadoop fs -ls results/py_mrjob/output
 if [[ $? -ne 0 ]]; then
     time python3 CosineSimilarity.py \
     -r hadoop hdfs:///user/hadoop/results/py_mrjob/job3/part-00000 \
