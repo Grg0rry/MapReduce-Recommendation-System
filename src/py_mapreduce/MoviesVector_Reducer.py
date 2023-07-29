@@ -20,7 +20,7 @@ for line in sys.stdin:
             UserRating = [(int(UserID), int(Rating))]
         MovieRating[MovieTitle] = UserRating
 
-    print('%s\t%s' % (MovieTitle, MovieRating[MovieTitle]))
+        print('%s\t%s' % (MovieTitle, MovieRating[MovieTitle]))
 
 # for MovieTitle, UserRating in MovieRating.items():  
 #     UserRatingsByOrder = {Order_UserID: 0 for Order_UserID in UserList}
