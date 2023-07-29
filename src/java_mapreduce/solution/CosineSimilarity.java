@@ -71,9 +71,11 @@ public class CosineSimilarity {
                     RealVector vector2 = entry2.getValue();
                     double magnitude2 = magnitudeMap.get(movieTitle2);
 
-                    double dotProduct = vector1.dotProduct(vector2);
-                    double similarity = dotProduct / (magnitude1 * magnitude2);
-                    context.write(new Text("(" + movieTitle1 + "," + movieTitle2 + ")"), new DoubleWritable(similarity));
+                    if (movieTitle1 != movieTitle2) {
+                        double dotProduct = vector1.dotProduct(vector2);
+                        double similarity = dotProduct / (magnitude1 * magnitude2);
+                        context.write(new Text("(" + movieTitle1 + "," + movieTitle2 + ")"), new DoubleWritable(similarity));
+                    }
                 }
             }
         }

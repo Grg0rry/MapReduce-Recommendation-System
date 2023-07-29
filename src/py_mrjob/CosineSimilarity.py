@@ -23,14 +23,24 @@ class CosineSimilarity(MRJob):
 
     def reducer(self, MovieTitle, Vectors):
         for Vector in Vectors:
-            self.Movie_Vector[MovieTitle] = np.array(Vector)
-            self.Magnitude[MovieTitle] = np.linalg.norm(Vector)
+            self.Movie_Vector[MovieTitle] = Vector
+            self.Magnitude[MovieTitle] = sum(component ** 2 for component in Vector) ** 0.5
+
+            # self.Movie_Vector[MovieTitle] = np.array(Vector)
+            # self.Magnitude[MovieTitle] = np.linalg.norm(Vector)
     
     def reducer_final(self):
-        for (MovieTitle, Vector), (Next_MovieTitle, Next_Vector) in combinations(self.Movie_Vector.items(), 2):
-            dot_product = np.dot(Vector, Next_Vector)
-            similarity = dot_product / (self.Magnitude[MovieTitle] * self.Magnitude[Next_MovieTitle])
-            yield ((MovieTitle, Next_MovieTitle), similarity)
+        for MovieTitle_1, Vector_1 in self.Movie_Vector.items():
+            for MovieTitle_2, Vector_2 in self.Movie_Vector.items():
+                if MovieTitle_1 != MovieTitle_2:
+                    dot_product = sum(v1 * v2 for v1, v2 in zip(Vector_1, Vector_2))
+                    similarity = dot_product / (self.Magnitude[MovieTitle_1] * self.Magnitude[MovieTitle_2])
+                    yield((MovieTitle_1, MovieTitle_2), similarity)
+        
+        # for (MovieTitle, Vector), (Next_MovieTitle, Next_Vector) in combinations(self.Movie_Vector.items(), 2):
+        #     dot_product = np.dot(Vector, Next_Vector)
+        #     similarity = dot_product / (self.Magnitude[MovieTitle] * self.Magnitude[Next_MovieTitle])
+        #     yield ((MovieTitle, Next_MovieTitle), similarity)
 
     def steps(self):
         return [
