@@ -15,10 +15,9 @@ for line in sys.stdin:
         MovieTitle = line[0]
 
         if MovieTitle in MovieRating:
-            UserRating.append((int(UserID), int(Rating)))
+            MovieRating[MovieTitle].append((int(UserID), int(Rating)))
         else:
-            UserRating = [(int(UserID), int(Rating))]
-        MovieRating[MovieTitle] = UserRating
+            MovieRating[MovieTitle] = [(int(UserID), int(Rating))]
 
         print('%s\t%s' % (MovieTitle, MovieRating[MovieTitle]))
 
