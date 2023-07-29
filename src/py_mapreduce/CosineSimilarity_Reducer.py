@@ -16,23 +16,14 @@ for line in sys.stdin:
 
     Movie_Vector[MovieTitle] = Vector
     # Magnitude[MovieTitle] = np.linalg.norm(Vector)
-
-    magnitude = 0
-    for val in Vector:
-        magnitude += val * val
-    Magnitude[MovieTitle] = magnitude
+    Magnitude[MovieTitle] = sum(val * val for val in Vector)
 
 
-for MovieTitle_1, Vector_1 in Movie_Vector.items():
-    for MovieTitle_2, Vector_2 in Movie_Vector.items():
-        if MovieTitle_1 != MovieTitle_2:
-
-            dot_product = 0
-            for i in range(len(Vector_1)):
-                dot_product += Vector_1[i] * Vector_2[i]
-            
-            similarity = dot_product / (Magnitude[MovieTitle_1] * Magnitude[MovieTitle_2])
-            print('%s\t%s' % ((MovieTitle_1, MovieTitle_2), similarity))
+for i, (MovieTitle_1, Vector_1) in enumerate(Movie_Vector.items()):
+    for MovieTitle_2, Vector_2 in list(Movie_Vector.items())[i + 1:]:
+        dot_product = sum(v1 * v2 for v1, v2 in zip(Vector_1, Vector_2))
+        similarity = dot_product / (Magnitude[MovieTitle_1] * Magnitude[MovieTitle_2])
+        print('%s\t%s' % ((MovieTitle_1, MovieTitle_2), similarity))
 
 # for (MovieTitle, Vector), (Next_MovieTitle, Next_Vector) in combinations(Movie_Vector.items(), 2):
 #     dot_product = np.dot(Vector, Next_Vector)
