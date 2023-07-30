@@ -53,10 +53,10 @@ public class CosineSimilarity {
         public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
             List<Integer> movieVector = new ArrayList<>();
 
-            double magnitude = 0.0;
+            int magnitude = 0;
             for (IntWritable value: values){
                 movieVector.add(value.get());
-                magnitude += (double) value * value;
+                magnitude += value * value;
             }
 
             RealVector vector = new ArrayRealVector(movieVector.stream().mapToDouble(Integer::doubleValue).toArray());
