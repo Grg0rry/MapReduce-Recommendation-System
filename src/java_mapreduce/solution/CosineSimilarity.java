@@ -50,13 +50,13 @@ public class CosineSimilarity {
         private Map<String, Double> magnitudeMap = new HashMap<>();
 
         @Override
-        public void reduce(javax.xml.soap.Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
+        public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
             List<Integer> movieVector = new ArrayList<>();
 
             double magnitude = 0.0;
             for (IntWritable value: values){
                 movieVector.add(value.get());
-                magnitude += value * value;
+                magnitude += (double) value * value;
             }
 
             RealVector vector = new ArrayRealVector(movieVector.stream().mapToDouble(Integer::doubleValue).toArray());
