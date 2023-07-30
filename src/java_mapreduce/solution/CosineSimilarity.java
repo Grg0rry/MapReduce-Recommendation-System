@@ -23,7 +23,6 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
-import org.apache.commons.math3.linear.SparseVector;
 import org.apache.commons.math3.util.FastMath;
 
 
@@ -49,8 +48,7 @@ public class CosineSimilarity {
     /* Reducer */
     public static class CosineSimilarityReducer extends Reducer<Text, IntWritable, Text, DoubleWritable> {
 
-        // private Map<String, RealVector> movieVectorMap = new HashMap<>();
-        private Map<String, SparseVector> movieVectorMap = new HashMap<>();
+        private Map<String, RealVector> movieVectorMap = new HashMap<>();
         private Map<String, Double> magnitudeMap = new HashMap<>();
         private Set<String> combinationsSet = new HashSet<>();
 
@@ -64,14 +62,7 @@ public class CosineSimilarity {
                 magnitude += value.get() * value.get();
             }
 
-            // RealVector vector = new ArrayRealVector(movieVector.stream().mapToDouble(Integer::doubleValue).toArray());
-            SparseVector vector = new SparseVector(movieVector.size());
-            for (int i = 0; i < movieVector.size(); i++) {
-                if (movieVector.get(i) != 0){
-                    vector.set(i, movieVector.get(i));
-                }
-            }
-
+            RealVector vector = new ArrayRealVector(movieVector.stream().mapToDouble(Integer::doubleValue).toArray());
             movieVectorMap.put(key.toString(), vector);
             magnitudeMap.put(key.toString(), FastMath.sqrt(magnitude));
         }
@@ -82,14 +73,12 @@ public class CosineSimilarity {
             
             for (Map.Entry<String, RealVector> entry1 : movieVectorMap.entrySet()) {
                 String movieTitle1 = entry1.getKey();
-                // RealVector vector1 = entry1.getValue();
-                SparseVector vector1 = entry1.getValue();
+                RealVector vector1 = entry1.getValue();
                 double magnitude1 = magnitudeMap.get(movieTitle1);
 
                 for (Map.Entry<String, RealVector> entry2 : movieVectorMap.entrySet()) {
                     String movieTitle2 = entry2.getKey();
-                    // RealVector vector2 = entry2.getValue();
-                    SparseVector vector2 = entry2.getValue();
+                    RealVector vector2 = entry2.getValue();
                     double magnitude2 = magnitudeMap.get(movieTitle2);
 
                     if ((!movieTitle1.equals(movieTitle2)) && (!combinationsSet.contains(movieTitle1+","+movieTitle2) || !combinationsSet.contains(movieTitle2+","+movieTitle1))) {
