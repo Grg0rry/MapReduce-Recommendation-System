@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
@@ -19,6 +21,7 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealVector;
+import org.apache.commons.math3.util.FastMath;
 
 
 public class CosineSimilarity {
@@ -47,23 +50,27 @@ public class CosineSimilarity {
         private Map<String, Double> magnitudeMap = new HashMap<>();
 
         @Override
-        public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
+        public void reduce(javax.xml.soap.Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
             List<Integer> movieVector = new ArrayList<>();
 
+            double magnitude = 0.0;
             for (IntWritable value: values){
                 movieVector.add(value.get());
+                magnitude += value * value;
             }
-            RealVector vector = new ArrayRealVector(movieVector.stream().mapToDouble(Integer::doubleValue).toArray());
 
+            RealVector vector = new ArrayRealVector(movieVector.stream().mapToDouble(Integer::doubleValue).toArray());
             movieVectorMap.put(key.toString(), vector);
-            magnitudeMap.put(key.toString(), vector.getNorm());
+            magnitudeMap.put(key.toString(), FastMath.sqrt(magnitude));
         }
 
         @Override
         protected void cleanup(Context context) throws IOException, InterruptedException {
+            Map<String, Map<String, Double>> similarityMap = new ConcurrentHashMap<>();
+            
             for (Map.Entry<String, RealVector> entry1 : movieVectorMap.entrySet()) {
                 String movieTitle1 = entry1.getKey();
-                RealVector vector1 = entry1.getValue();              
+                RealVector vector1 = entry1.getValue();
                 double magnitude1 = magnitudeMap.get(movieTitle1);
 
                 for (Map.Entry<String, RealVector> entry2 : movieVectorMap.entrySet()) {
@@ -71,12 +78,21 @@ public class CosineSimilarity {
                     RealVector vector2 = entry2.getValue();
                     double magnitude2 = magnitudeMap.get(movieTitle2);
 
-                    if (movieTitle1 != movieTitle2) {
+                    if (!movieTitle1.equals(movieTitle2)) {
                         double dotProduct = vector1.dotProduct(vector2);
                         double similarity = dotProduct / (magnitude1 * magnitude2);
-                        context.write(new Text("(" + movieTitle1 + "," + movieTitle2 + ")"), new DoubleWritable(similarity));
+
+                        similarityMap.computeIfAbsent(movieTitle1, k -> new HashMap<>()).put(movieTitle2, similarity);
+                        similarityMap.computeIfAbsent(movieTitle2, k -> new HashMap<>()).put(movieTitle1, similarity);
                     }
                 }
+            }
+
+            for (Map.Entry<String, Map<String, Double>> entry : similarityMap.entrySet()){
+                String movieTitle = entry.getKey();
+                Map<String, Double> similarity = entry.getValue();
+                
+                context.write(new Text("(" + movieTitle + "," + similarity.keySet().iterator().next() + ")"), new DoubleWritable(similarity.values().stream().max(Double::compareTo).get()));
             }
         }
     }
