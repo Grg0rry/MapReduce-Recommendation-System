@@ -3,8 +3,10 @@ package solution;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -46,8 +48,10 @@ public class CosineSimilarity {
     /* Reducer */
     public static class CosineSimilarityReducer extends Reducer<Text, IntWritable, Text, DoubleWritable> {
 
-        private Map<String, RealVector> movieVectorMap = new HashMap<>();
+        // private Map<String, RealVector> movieVectorMap = new HashMap<>();
+        private Map<String, SparseVector> movieVectorMap = new HashMap<>();
         private Map<String, Double> magnitudeMap = new HashMap<>();
+        private Set<String> combinationsSet = new HashSet<>();
 
         @Override
         public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
@@ -59,7 +63,14 @@ public class CosineSimilarity {
                 magnitude += value.get() * value.get();
             }
 
-            RealVector vector = new ArrayRealVector(movieVector.stream().mapToDouble(Integer::doubleValue).toArray());
+            // RealVector vector = new ArrayRealVector(movieVector.stream().mapToDouble(Integer::doubleValue).toArray());
+            SparseVector vector = new SparseVector(movieVector.size());
+            for (int i = 0; i < movieVector.size(); i++) {
+                if (movieVector.get(i) != 0){
+                    vector.set(i, movieVector.get(i));
+                }
+            }
+
             movieVectorMap.put(key.toString(), vector);
             magnitudeMap.put(key.toString(), FastMath.sqrt(magnitude));
         }
@@ -70,29 +81,25 @@ public class CosineSimilarity {
             
             for (Map.Entry<String, RealVector> entry1 : movieVectorMap.entrySet()) {
                 String movieTitle1 = entry1.getKey();
-                RealVector vector1 = entry1.getValue();
+                // RealVector vector1 = entry1.getValue();
+                SparseVector vector1 = entry1.getValue();
                 double magnitude1 = magnitudeMap.get(movieTitle1);
 
                 for (Map.Entry<String, RealVector> entry2 : movieVectorMap.entrySet()) {
                     String movieTitle2 = entry2.getKey();
-                    RealVector vector2 = entry2.getValue();
+                    // RealVector vector2 = entry2.getValue();
+                    SparseVector vector2 = entry2.getValue();
                     double magnitude2 = magnitudeMap.get(movieTitle2);
 
-                    if (!movieTitle1.equals(movieTitle2)) {
+                    if ((!movieTitle1.equals(movieTitle2)) && (!combinationsSet.contains(movieTitle1+","+movieTitle2) || !combinationsSet.contains(movieTitle2+","+movieTitle1))) {
                         double dotProduct = vector1.dotProduct(vector2);
                         double similarity = dotProduct / (magnitude1 * magnitude2);
-
-                        similarityMap.computeIfAbsent(movieTitle1, k -> new HashMap<>()).put(movieTitle2, similarity);
-                        similarityMap.computeIfAbsent(movieTitle2, k -> new HashMap<>()).put(movieTitle1, similarity);
+                        context.write(new Text("("+movieTitle1+","+movieTitle2+")"), new DoubleWritable(similarity));
+                        context.write(new Text("("+movieTitle2+","+movieTitle1+")"), new DoubleWritable(similarity));
+                        combinationsSet.add(movieTitle1+","+movieTitle2);
+                        combinationsSet.add(movieTitle2+","+movieTitle1);
                     }
                 }
-            }
-
-            for (Map.Entry<String, Map<String, Double>> entry : similarityMap.entrySet()){
-                String movieTitle = entry.getKey();
-                Map<String, Double> similarity = entry.getValue();
-                
-                context.write(new Text("(" + movieTitle + "," + similarity.keySet().iterator().next() + ")"), new DoubleWritable(similarity.values().stream().max(Double::compareTo).get()));
             }
         }
     }
