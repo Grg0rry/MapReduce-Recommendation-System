@@ -56,7 +56,7 @@ public class CosineSimilarity {
             int magnitude = 0;
             for (IntWritable value: values){
                 movieVector.add(value.get());
-                magnitude += value * value;
+                magnitude += value.get() * value.get();
             }
 
             RealVector vector = new ArrayRealVector(movieVector.stream().mapToDouble(Integer::doubleValue).toArray());
