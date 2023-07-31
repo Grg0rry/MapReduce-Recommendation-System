@@ -68,24 +68,22 @@ public class CosineSimilarity {
         }
 
         @Override
-        protected void cleanup(Context context) throws IOException, InterruptedException {
-            Map<String, Map<String, Double>> similarityMap = new ConcurrentHashMap<>();
-            
+        protected void cleanup(Context context) throws IOException, InterruptedException {            
             for (Map.Entry<String, RealVector> entry1 : movieVectorMap.entrySet()) {
-                String movieTitle1 = entry1.getKey();
-                RealVector vector1 = entry1.getValue();
-                double magnitude1 = magnitudeMap.get(movieTitle1);
-
                 for (Map.Entry<String, RealVector> entry2 : movieVectorMap.entrySet()) {
+                    String movieTitle1 = entry1.getKey();
                     String movieTitle2 = entry2.getKey();
-                    RealVector vector2 = entry2.getValue();
-                    double magnitude2 = magnitudeMap.get(movieTitle2);
-
                     if ((!movieTitle1.equals(movieTitle2)) && (!combinationsSet.contains(movieTitle1+","+movieTitle2) || !combinationsSet.contains(movieTitle2+","+movieTitle1))) {
+                        
+                        RealVector vector1 = entry1.getValue();
+                        double magnitude1 = magnitudeMap.get(movieTitle1);
+                        RealVector vector2 = entry2.getValue();
+                        double magnitude2 = magnitudeMap.get(movieTitle2);
+
                         double dotProduct = vector1.dotProduct(vector2);
                         double similarity = dotProduct / (magnitude1 * magnitude2);
                         context.write(new Text("("+movieTitle1+","+movieTitle2+")"), new DoubleWritable(similarity));
-                        context.write(new Text("("+movieTitle2+","+movieTitle1+")"), new DoubleWritable(similarity));
+                        
                         combinationsSet.add(movieTitle1+","+movieTitle2);
                         combinationsSet.add(movieTitle2+","+movieTitle1);
                     }
@@ -95,8 +93,7 @@ public class CosineSimilarity {
     }
 
     /* Driver */
-    public static void main(String[] args) throws Exception {
-        
+    public static void main(String[] args) throws Exception {        
         if (args.length != 2) {
             System.out.printf(
                 "Usage: MapReduce <input dir> <output dir>\n");
