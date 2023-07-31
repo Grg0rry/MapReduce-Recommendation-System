@@ -7,6 +7,7 @@ movie1="Batman Beyond: The Movie"
 movie2="The Addams Family"
 movie3="The Avengers"
 
+rm -r temp
 mkdir temp
 py_mapred_streaming="/home/hadoop/recommendation-system/temp/py_mapred_streaming"
 local_mapreduce="/home/hadoop/recommendation-system/temp/local_mapreduce"
