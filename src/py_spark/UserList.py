@@ -2,8 +2,14 @@
 
 from pyspark.sql import SparkSession
 
-spark = SparkSession.builder.master("local[*]").appName("UserList").getOrCreate()
-sc=spark.sparkContext 
+def initialize_session(appName):
+    spark = SparkSession.builder.master("local[*]").appName(appName).getOrCreate()
+    global sc=spark.sparkContext
+
+shakespeare_rdd = sc.textFile("/shakespeare/comedies/")
+
+if __name__ == '__main__':
+
 
 
 class UserList(MRJob):
@@ -21,4 +27,4 @@ class UserList(MRJob):
         yield(str("$User_List"), int(key))
 
 if __name__ == '__main__':
-    UserList.run()
+    initialize_session("UserList")

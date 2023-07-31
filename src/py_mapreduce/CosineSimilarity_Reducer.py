@@ -10,9 +10,7 @@ Magnitude = {}
 for line in sys.stdin:
     line = line.strip().split('\t', 1)
 
-    MovieTitle = line[0]
-    Vector = [int(item.strip()) for item in line[1].strip('[]').split(',')]
-    
+    MovieTitle = line[0]    
     Vector = np.array([int(item.strip()) for item in line[1].strip('[]').split(',')])
     Magnitude[MovieTitle] = np.linalg.norm(Vector)
     Movie_Vector[MovieTitle] = Vector
