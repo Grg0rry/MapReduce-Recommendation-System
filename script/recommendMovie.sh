@@ -7,12 +7,12 @@ movie1="Batman Beyond: The Movie"
 movie2="The Addams Family"
 movie3="The Avengers"
 
+mkdir temp
 py_mapred_streaming="temp/py_mapred_streaming"
 local_mapreduce="temp/local_mapreduce"
 py_mrjob="temp/py_mrjob"
 java_mapreduce="temp/java_mapreduce"
 
-mkdir temp
 hadoop fs -get "results/py_mapred_streaming/output/part-00000" "$py_mapred_streaming"
 hadoop fs -get "results/local_mapreduce/output" "$local_mapreduce"
 hadoop fs -get "results/py_mrjob/output/part-00000" "$py_mrjob"
