@@ -7,11 +7,16 @@ movie1="Batman Beyond: The Movie"
 movie2="The Addams Family"
 movie3="The Avengers"
 
-py_mapred_streaming="results/py_mapred_streaming/output/part-00000"
-local_mapreduce="results/local_mapreduce/output"
-py_mrjob="results/py_mrjob/output/part-00000"
-java_mapreduce="results/java_mapreduce/output/part-r-00000"
+py_mapred_streaming="temp/py_mapred_streaming"
+local_mapreduce="temp/local_mapreduce"
+py_mrjob="temp/py_mrjob"
+java_mapreduce="temp/java_mapreduce"
 
+mkdir temp
+hadoop fs -get "results/py_mapred_streaming/output/part-00000" "$py_mapred_streaming"
+hadoop fs -get "results/local_mapreduce/output" "$local_mapreduce"
+hadoop fs -get "results/py_mrjob/output/part-00000" "$py_mrjob"
+hadoop fs -get "results/java_mapreduce/output/part-r-00000" "$java_mapreduce"
 
 echo "py_mapred_streaming"
 echo $movie1
@@ -96,3 +101,5 @@ python3 "$codePath" \
 -CosineSim_Reducer "$java_mapreduce" \
 -Search_Movie "$movie3" \
 -Num_Recommend $num_to_recommend
+
+rm temp
