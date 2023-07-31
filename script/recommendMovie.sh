@@ -8,10 +8,10 @@ movie2="The Addams Family"
 movie3="The Avengers"
 
 mkdir temp
-py_mapred_streaming="/home/hadoop/temp/py_mapred_streaming"
-local_mapreduce="/home/hadoop/temp/local_mapreduce"
-py_mrjob="/home/hadoop/temp/py_mrjob"
-java_mapreduce="/home/hadoop/temp/java_mapreduce"
+py_mapred_streaming="/home/hadoop/recommendation-system/temp/py_mapred_streaming"
+local_mapreduce="/home/hadoop/recommendation-system/temp/local_mapreduce"
+py_mrjob="/home/hadoop/recommendation-system/temp/py_mrjob"
+java_mapreduce="/home/hadoop/recommendation-system/temp/java_mapreduce"
 
 hadoop fs -get "results/py_mapred_streaming/output/part-00000" "$py_mapred_streaming"
 hadoop fs -get "results/local_mapreduce/output" "$local_mapreduce"
