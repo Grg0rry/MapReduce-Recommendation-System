@@ -37,7 +37,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Movie Recommendation Search.')
     parser.add_argument('-CosineSim_Reducer', required=True, type=str, help='file output of the CosineSimilarity Reducer')
     parser.add_argument('-Search_Movie', required=True, type=str, help='search MovieTitle')
-    parser.add_argument('-Num_Recommend', required=True, type=str, help='number of recommendations to output')
+    parser.add_argument('-Num_Recommend', required=True, type=int, help='number of recommendations to output')
     args = parser.parse_args()
 
     df = read_cosine_reducer(args.CosineSim_Reducer)
