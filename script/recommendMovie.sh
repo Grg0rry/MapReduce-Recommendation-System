@@ -19,84 +19,72 @@ hadoop fs -get "results/py_mrjob/output/part-00000" "$py_mrjob"
 hadoop fs -get "results/java_mapreduce/output/part-r-00000" "$java_mapreduce"
 
 echo "py_mapred_streaming"
-echo $movie1
+echo "-------------------"
 python3 "$codePath" \
 -CosineSim_Reducer "$py_mapred_streaming" \
 -Search_Movie "$movie1" \
 -Num_Recommend $num_to_recommend
 
-echo "py_mapred_streaming"
-echo $movie2
 python3 "$codePath" \
 -CosineSim_Reducer "$py_mapred_streaming" \
 -Search_Movie "$movie2" \
 -Num_Recommend $num_to_recommend
 
-echo "py_mapred_streaming"
-echo $movie3
 python3 "$codePath" \
 -CosineSim_Reducer "$py_mapred_streaming" \
 -Search_Movie "$movie3" \
 -Num_Recommend $num_to_recommend
 
+
 echo "local_mapreduce"
-echo $movie1
+echo "-------------------"
 python3 "$codePath" \
 -CosineSim_Reducer "$local_mapreduce" \
 -Search_Movie "$movie1" \
 -Num_Recommend $num_to_recommend
 
-echo "local_mapreduce"
-echo $movie2
 python3 "$codePath" \
 -CosineSim_Reducer "$local_mapreduce" \
 -Search_Movie "$movie2" \
 -Num_Recommend $num_to_recommend
 
-echo "local_mapreduce"
-echo $movie3
 python3 "$codePath" \
 -CosineSim_Reducer "$local_mapreduce" \
 -Search_Movie "$movie3" \
 -Num_Recommend $num_to_recommend
+
 
 echo "py_mrjob"
+echo "-------------------"
 echo $movie1
 python3 "$codePath" \
 -CosineSim_Reducer "$py_mrjob" \
 -Search_Movie "$movie1" \
 -Num_Recommend $num_to_recommend
 
-echo "py_mrjob"
-echo $movie2
 python3 "$codePath" \
 -CosineSim_Reducer "$py_mrjob" \
 -Search_Movie "$movie2" \
 -Num_Recommend $num_to_recommend
 
-echo "py_mrjob"
-echo $movie3
 python3 "$codePath" \
 -CosineSim_Reducer "$py_mrjob" \
 -Search_Movie "$movie3" \
 -Num_Recommend $num_to_recommend
+
 
 echo "java_mapreduce"
-echo $movie1
+echo "-------------------"
 python3 "$codePath" \
 -CosineSim_Reducer "$java_mapreduce" \
 -Search_Movie "$movie1" \
 -Num_Recommend $num_to_recommend
 
-echo "java_mapreduce"
-echo $movie2
 python3 "$codePath" \
 -CosineSim_Reducer "$java_mapreduce" \
 -Search_Movie "$movie2" \
 -Num_Recommend $num_to_recommend
 
-echo "java_mapreduce"
-echo $movie3
 python3 "$codePath" \
 -CosineSim_Reducer "$java_mapreduce" \
 -Search_Movie "$movie3" \
