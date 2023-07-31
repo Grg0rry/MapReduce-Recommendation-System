@@ -6,21 +6,19 @@ import sys
 def read_cosine_reducer(file):
     reducer_output = []
 
-    try:
-        with open(file, 'r') as f:
-            for line in f:
-                line = line.strip().split("\t", 1)
+    with open(file, 'r') as f:
+        for line in f:
+            line = line.strip().split("\t", 1)
 
-                MovieData = line[0].strip("[()]").split(",")
-                Movies1 = str(MovieData[0])
-                Movies2 = str(MovieData[1])
-                Rating = float(line[1])
+            MovieData = line[0].strip("[()]").split(",")
+            Movies1 = str(MovieData[0])
+            Movies2 = str(MovieData[1])
+            Rating = float(line[1])
 
-                reducer_output.append(Movies1, Movies2, Rating)
+            reducer_output.append(Movies1, Movies2, Rating)
 
-        df = pd.DataFrame(reducer_output, columns=["MovieTitle_1", "MovieTitle_2", "Similarity"])
-    except:
-        sys.exit(f'file of {file} cant be open...')
+    df = pd.DataFrame(reducer_output, columns=["MovieTitle_1", "MovieTitle_2", "Similarity"])
+    
     return df
 
 
