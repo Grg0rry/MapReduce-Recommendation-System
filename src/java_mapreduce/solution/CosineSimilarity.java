@@ -83,7 +83,7 @@ public class CosineSimilarity {
                         double dotProduct = vector1.dotProduct(vector2);
                         double similarity = dotProduct / (magnitude1 * magnitude2);
                         context.write(new Text("("+movieTitle1+","+movieTitle2+")"), new DoubleWritable(similarity));
-                        
+                        context.write(new Text("("+movieTitle2+","+movieTitle1+")"), new DoubleWritable(similarity));
                         combinationsSet.add(movieTitle1+","+movieTitle2);
                         combinationsSet.add(movieTitle2+","+movieTitle1);
                     }
