@@ -3,9 +3,9 @@ set -e
 
 codePath=./src/main.py
 num_to_recommend=10
-movie1="Batman Beyond: The Movie"
-movie2="The Addams Family"
-movie3="The Avengers"
+movie1="'Batman Beyond: The Movie'"
+movie2="'The Addams Family'"
+movie3="'The Avengers'"
 
 py_mapred_streaming="results/py_mapred_streaming/output/part-00000"
 local_mapreduce="results/local_mapreduce/output"
