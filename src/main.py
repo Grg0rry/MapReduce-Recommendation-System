@@ -25,7 +25,7 @@ def read_cosine_reducer(file):
 def find_similar_movies(df, movie_title, num_recommend):
     movie_filtered = df[df["MovieTitle_1"].str.contains(movie_title, case=False)]
     movie_filtered = movie_filtered.sort_values(by="Similarity", ascending=False)
-    recommendation = movie_filtered.head(num_recommend)[["MovieTitle_2"]]
+    recommendation = movie_filtered.head(num_recommend)["MovieTitle_2", "Similarity"]
     return recommendation
 
 
