@@ -23,10 +23,11 @@ def read_cosine_reducer(file):
 
 
 def find_similar_movies(df, movie_title, num_recommend):
+    print(f'Search MovieTitle: {movie_title}')
     movie_filtered = df[df["MovieTitle_1"].str.contains(movie_title, case=False)]
     movie_filtered = movie_filtered.sort_values(by="Similarity", ascending=False)
-    recommendation = movie_filtered.head(num_recommend)["MovieTitle_2", "Similarity"]
-    return recommendation
+    recommendation = movie_filtered.head(num_recommend)[["MovieTitle_2", "Similarity"]]
+    print(f'Recommendations: {recommendation}')
 
 
 if __name__ == "__main__":
@@ -39,4 +40,4 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     df = read_cosine_reducer(args.CosineSim_Reducer)
-    print(find_similar_movies(df, args.Search_Movie, args.Num_Recommend))
+    find_similar_movies(df, args.Search_Movie, args.Num_Recommend)
