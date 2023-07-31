@@ -1,7 +1,8 @@
 #!/bin/bash
 
-# Input -- input_data="netflix_data/cleaned_moviesTitles.csv"
-input_data="netflix_data/sample"
+# Input
+# input_data="netflix_data/sample" # 500MB
+input_data="netflix_data/cleaned_moviesTitles.csv" # 2GB
 output_data="results/java_py_mapreduce/output"
 
 # Check hdfs connection
