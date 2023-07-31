@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Input
-# input_data="hdfs:///user/hadoop/netflix_data/sample" # 500MB
-input_data="hdfs:///user/hadoop/netflix_data/cleaned_moviesTitles.csv" # 2GB
+# input_data="hdfs:///user/hadoop/netflix_data/cleaned_moviesTitles.csv" # 2GB
+input_data="hdfs:///user/hadoop/netflix_data/sample" # 500MB
 output_data="hdfs:///user/hadoop/results/py_mrjob/output"
 
 # Check hdfs connection
