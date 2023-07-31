@@ -15,7 +15,7 @@ def read_cosine_reducer(file):
             Movies2 = str(MovieData[1])
             Rating = float(line[1])
 
-            reducer_output.append(Movies1, Movies2, Rating)
+            reducer_output.append([Movies1, Movies2, Rating])
 
     df = pd.DataFrame(reducer_output, columns=["MovieTitle_1", "MovieTitle_2", "Similarity"])
     
