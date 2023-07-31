@@ -56,7 +56,6 @@ python3 "$codePath" \
 
 echo "py_mrjob"
 echo "-------------------"
-echo $movie1
 python3 "$codePath" \
 -CosineSim_Reducer "$py_mrjob" \
 -Search_Movie "$movie1" \
