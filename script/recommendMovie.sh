@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 codePath=./src/main.py
 num_to_recommend=10
