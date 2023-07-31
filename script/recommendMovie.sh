@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-codePath=main.py
+codePath=./src/main.py
 num_to_recommend=10
 movie1="Batman Beyond: The Movie"
 movie2="The Addams Family"

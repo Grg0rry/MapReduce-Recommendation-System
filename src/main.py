@@ -1,5 +1,4 @@
 import pandas as pd
-import ast
 import argparse
 import sys
 
@@ -11,15 +10,22 @@ def read_cosine_reducer(file):
         with open(file, 'r') as f:
             for line in f:
                 line = line.strip().split("\t", 1)
-                reducer_output.append((ast.literal_eval(line[0]), float(line[1])))
+
+                MovieData = line[0].strip("[()]").split(",")
+                Movies1 = str(MovieData[0])
+                Movies2 = str(MovieData[1])
+                Rating = float(line[1])
+
+                reducer_output.append(Movies1, Movies2, Rating)
 
         df = pd.DataFrame(reducer_output, columns=["MovieTitle_1", "MovieTitle_2", "Similarity"])
     except:
         sys.exit(f'file of {file} cant be open...')
     return df
 
+
 def find_similar_movies(df, movie_title, num_recommend):
-    movie_filtered = df[df["MovieTitle_1"] == movie_title]
+    movie_filtered = df[df["MovieTitle_1"].str.contains(movie_title, case=False)]
     movie_filtered = movie_filtered.sort_values(by="Similarity", ascending=False)
     recommendation = movie_filtered.head(num_recommend)[["MovieTitle_2"]]
     return recommendation
