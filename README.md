@@ -1,5 +1,5 @@
-# recommendation-system
-A recommendation system built on top of Hadoop Distributed File System and MapReduce
+# MapReduce Recommendation System
+Recommendation engine using the item-based collaborative filtering technique built on top of Hadoop Distributed File System and MapReduce to recommend movies with a repository of Netflix movie rating data.
 
 ## Background
 The whole system runs on a cluster of AWS EC2 instances with the SunU-Hadoop-Image v1.3 AMI, where it is configured with 1 master node and 5 slave nodes, all of which uses the `t2.large` instance type.
@@ -62,7 +62,18 @@ For the sample, it is obtained by running
 ```bash
 split -b 500M data/cleaned_moviesTitles.csv sample
 ```
-Here is the link to the S3 bucket to directly download the cleaned dataset [[Download](https://netflix-big-data-assignment.s3.amazonaws.com/datafiles.zip)]
+
+To directly access the cleaned dataset
+1. Download the zip file:
+[[Download](https://public-netflix-data-store.s3.amazonaws.com/datafiles.zip)]
+2. Access through AWS-CLI
+```
+aws s3 ls s3://public-netflix-data-store/data
+```
+```
+aws s3 sync s3://public-netflix-data-store/data/* <local-folder>
+```
+Here is the link to the S3 bucket to directly download the cleaned dataset 
 
 **Note:** \
 The data cleaning can only be done on a local instance without MapReduce due to the format and structure of `combined_data_*.txt` file. 
