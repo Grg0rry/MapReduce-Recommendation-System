@@ -15,7 +15,7 @@ for line in sys.stdin:
     Magnitude[MovieTitle] = np.linalg.norm(Vector)
     Movie_Vector[MovieTitle] = Vector
 
-
+# Loop to compute the similarity score for each movie pair
 for (MovieTitle, Vector), (Next_MovieTitle, Next_Vector) in combinations(Movie_Vector.items(), 2):
     dot_product = np.dot(Vector, Next_Vector)
     similarity = dot_product / (Magnitude[MovieTitle] * Magnitude[Next_MovieTitle])

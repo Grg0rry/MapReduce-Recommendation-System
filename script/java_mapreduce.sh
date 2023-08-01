@@ -12,7 +12,7 @@ if [[ $? -ne 0 ]]; then
 fi
 hadoop fs -rm -r results/java_mapreduce
 
-# Check directory
+# Check and Change directory
 directory="/home/hadoop/recommendation-system/src/java_mapreduce"
 if [[ $(pwd) != directory ]]; then
     cd $directory

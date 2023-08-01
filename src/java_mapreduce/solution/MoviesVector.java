@@ -44,6 +44,7 @@ public class MoviesVector {
 
     @Override
     protected void setup(Context context) throws IOException, InterruptedException {
+      // Goes through the additional UserList and Store into a Map for later processing
       read_userRatings = new HashMap<>();
 
       URI[] cacheFiles = context.getCacheFiles();
@@ -62,6 +63,7 @@ public class MoviesVector {
       Map<Integer, Integer> write_userRatings = new HashMap<>(read_userRatings);
       StringBuffer strblder = new StringBuffer();
 
+      // Create the vector for each movie
       for (Text userRating : values) {
         String[] UserRating = userRating.toString().split(":");
         int userID = Integer.parseInt(UserRating[0]);
@@ -80,24 +82,30 @@ public class MoviesVector {
 
   /* Driver */
   public static void main(String[] args) throws Exception {
-      
+    
+    // Create a new MapReduce job
     Job job = new Job();
 
+    // Set the job configuration
     job.setJarByClass(MoviesVector.class);
     job.setJobName("MoviesVector");
     
+    // Set the input and output paths and Additional file
     job.addCacheFile(new Path(args[0]).toUri());
     FileInputFormat.setInputPaths(job, new Path(args[1]));
     FileOutputFormat.setOutputPath(job, new Path(args[2]));
 
+    // Set the Mapper and Reducer classes
     job.setMapperClass(MoviesVectorMapper.class);
     job.setReducerClass(MoviesVectorReducer.class);
 
+    // Set the expected key and value types
     job.setMapOutputKeyClass(Text.class);
 		job.setMapOutputValueClass(Text.class);
     job.setOutputKeyClass(Text.class);
     job.setOutputValueClass(Text.class);
-          
+    
+    // Wait for the job to complete and then exit
     job.waitForCompletion(true);
   }
 }

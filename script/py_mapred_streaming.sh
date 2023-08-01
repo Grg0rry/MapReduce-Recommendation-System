@@ -12,7 +12,7 @@ if [[ $? -ne 0 ]]; then
 fi
 hadoop fs -rm -r results/py_mapred_streaming
 
-# Check directory
+# Check and Change directory
 directory="/home/hadoop/recommendation-system/src/py_mapreduce"
 if [[ $(pwd) != directory ]]; then
     cd $directory

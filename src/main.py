@@ -1,6 +1,5 @@
 import pandas as pd
 import argparse
-import sys
 
 
 def read_cosine_reducer(file):

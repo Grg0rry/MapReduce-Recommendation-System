@@ -8,6 +8,7 @@ UserList = []
 for line in sys.stdin:
     line = line.strip().split('\t', 1)
 
+    # Store into UserList or MovieRating
     if line[0].startswith("$User_List"):
         UserList.append(int(line[1]))
     else:
@@ -19,7 +20,7 @@ for line in sys.stdin:
         else:
             MovieRating[MovieTitle] = [(int(UserID), int(Rating))]
 
-
+# Create the Vector for each Movie
 for MovieTitle, UserRating in MovieRating.items():
     UserRatingsByOrder = {UserID: 0 for UserID in UserList}
 
@@ -29,9 +30,4 @@ for MovieTitle, UserRating in MovieRating.items():
     
     Vector = list(UserRatingsByOrder.values())
     print('%s\t%s' % (MovieTitle, Vector))
-
-
-# UserRating = MovieRating.get(MovieTitle, [])
-# UserRating.append((int(UserID), int(Rating)))
-# MovieRating[MovieTitle] = UserRating
 

@@ -6,10 +6,16 @@ from mrjob.step import MRStep
 class MovieVector(MRJob):
     
     def configure_args(self):
+        """
+        Takes in the additional input of UserList
+        """
         super(MovieVector, self).configure_args()
         self.add_file_arg('--file1', required=True, type=str)
 
     def userlist(self):
+        """
+        Lists the Unique UserID
+        """
         self.UserList = []
 
         with open(self.options.file1, 'r') as file1:
@@ -18,6 +24,9 @@ class MovieVector(MRJob):
                 self.UserList.append(int(line[1]))
 
     def mapper(self, _, line):
+        """
+        Performs mapper to create MovieTitle with a list of UserRating
+        """
         line = line.strip().replace('"','').split('\t', 1)
 
         MovieTitle = str(line[0])
@@ -26,8 +35,11 @@ class MovieVector(MRJob):
             UserID, Rating = pair.split(':')
             UserRating.append((int(UserID), int(Rating)))
         yield MovieTitle, UserRating
-        
+
     def reducer(self, MovieTitle, UserRatings):
+        """
+        Using UserList and Mapper to create the vector of ratings for each MovieTitle
+        """
         UserRatingsByOrder = {Order_UserID: 0 for Order_UserID in self.UserList}
 
         for UserRating in UserRatings:
@@ -39,6 +51,9 @@ class MovieVector(MRJob):
         yield (MovieTitle, Vector)
 
     def steps(self):
+        """
+        Combines and chains the functions together
+        """
         return [
             MRStep(mapper=self.mapper,
                    reducer_init=self.userlist,

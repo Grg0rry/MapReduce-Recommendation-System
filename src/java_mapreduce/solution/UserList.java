@@ -22,6 +22,7 @@ public class UserList {
 
       String[] items = value.toString().trim().split(",", 3);
 
+      // Ensure it has min 3 elements
       if (items.length >= 3) {
         int UserID = Integer.parseInt(items[1]);
 
@@ -35,35 +36,42 @@ public class UserList {
 
     @Override
     public void reduce(IntWritable key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
-              
+      
+      // Emits with the $User_List
       context.write(new Text("$User_List"), key);
     }
   }
 
   /* Driver */
   public static void main(String[] args) throws Exception {
-
     if (args.length != 2) {
       System.out.printf(
         "Usage: MapReduce <input dir> <output dir>\n");
       System.exit(-1);
     }
-      
+
+    // Create a new MapReduce job
     Job job = new Job();
+
+    // Set the job configuration
     job.setJarByClass(UserList.class);
     job.setJobName("UserList");
-      
+    
+    // Set the input and output paths
     FileInputFormat.setInputPaths(job, new Path(args[0]));
     FileOutputFormat.setOutputPath(job, new Path(args[1]));
 
+    // Set the Mapper and Reducer classes
     job.setMapperClass(UserListMapper.class);
     job.setReducerClass(UserListReducer.class);
     
+    // Set the expected key and value types
     job.setMapOutputKeyClass(IntWritable.class);
 		job.setMapOutputValueClass(Text.class);
     job.setOutputKeyClass(Text.class);
     job.setOutputValueClass(IntWritable.class);
-          
+    
+    // Wait for the job to complete and then exit
     job.waitForCompletion(true);
   }
 }

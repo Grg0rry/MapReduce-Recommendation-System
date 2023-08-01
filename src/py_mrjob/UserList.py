@@ -7,10 +7,11 @@ class UserList(MRJob):
     def mapper(self, _, line):
         line = line.strip().split(",", 2)
 
+        # check if it contains at least 3 elements
         if len(line) < 3:
             return
-        UserID = int(line[1])
         
+        UserID = int(line[1])
         yield(UserID, "")
 
     def reducer(self, key, values):

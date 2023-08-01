@@ -7,6 +7,7 @@ class DataDividedByMovie(MRJob):
     def mapper(self, _, line):
         line = line.strip().split(",", 2)
 
+        # check if it contains at least 3 elements
         if len(line) < 3:
             return
 

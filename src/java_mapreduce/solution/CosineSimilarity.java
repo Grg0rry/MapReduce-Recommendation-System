@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
@@ -33,7 +32,7 @@ public class CosineSimilarity {
 
         @Override
         public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
-            
+
             String[] line = value.toString().trim().split("\t", 2);
 
             String movieTitle = line[0];
@@ -48,6 +47,7 @@ public class CosineSimilarity {
     /* Reducer */
     public static class CosineSimilarityReducer extends Reducer<Text, IntWritable, Text, DoubleWritable> {
 
+        // To store movie vectors, magnitude, and combinations
         private Map<String, RealVector> movieVectorMap = new HashMap<>();
         private Map<String, Double> magnitudeMap = new HashMap<>();
         private Set<String> combinationsSet = new HashSet<>();
@@ -55,20 +55,23 @@ public class CosineSimilarity {
         @Override
         public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
             List<Integer> movieVector = new ArrayList<>();
-
+            
+            // Compute the magnitude and movie vector
             int magnitude = 0;
             for (IntWritable value: values){
                 movieVector.add(value.get());
                 magnitude += value.get() * value.get();
             }
 
+            // Convert the list of ratings to a real vector
             RealVector vector = new ArrayRealVector(movieVector.stream().mapToDouble(Integer::doubleValue).toArray());
             movieVectorMap.put(key.toString(), vector);
             magnitudeMap.put(key.toString(), FastMath.sqrt(magnitude));
         }
 
         @Override
-        protected void cleanup(Context context) throws IOException, InterruptedException {            
+        protected void cleanup(Context context) throws IOException, InterruptedException {       
+            // Iterate over all movie pairs and calculate cosine similarity
             for (Map.Entry<String, RealVector> entry1 : movieVectorMap.entrySet()) {
                 for (Map.Entry<String, RealVector> entry2 : movieVectorMap.entrySet()) {
                     String movieTitle1 = entry1.getKey();
@@ -80,10 +83,14 @@ public class CosineSimilarity {
                         RealVector vector2 = entry2.getValue();
                         double magnitude2 = magnitudeMap.get(movieTitle2);
 
+                        // Calculate dot product and cosine similarity
                         double dotProduct = vector1.dotProduct(vector2);
                         double similarity = dotProduct / (magnitude1 * magnitude2);
+
                         context.write(new Text("("+movieTitle1+","+movieTitle2+")"), new DoubleWritable(similarity));
                         context.write(new Text("("+movieTitle2+","+movieTitle1+")"), new DoubleWritable(similarity));
+
+                        // Mark the MovieTitle pair to avoid duplicates
                         combinationsSet.add(movieTitle1+","+movieTitle2);
                         combinationsSet.add(movieTitle2+","+movieTitle1);
                     }
@@ -100,22 +107,28 @@ public class CosineSimilarity {
             System.exit(-1);
         }
 
+        // Create a new MapReduce job
         Job job = new Job();
         
+        // Set the job configuration
         job.setJarByClass(CosineSimilarity.class);
         job.setJobName("CosineSimilarity");
 
+        // Set the input and output paths
         FileInputFormat.addInputPath(job, new Path(args[0]));
         FileOutputFormat.setOutputPath(job, new Path(args[1]));
 
+        // Set the Mapper and Reducer classes
         job.setMapperClass(CosineSimilarityMapper.class);
         job.setReducerClass(CosineSimilarityReducer.class);
 
+        // Set the expected key and value types
         job.setMapOutputKeyClass(Text.class);
 		job.setMapOutputValueClass(IntWritable.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(DoubleWritable.class);
 
+        // Wait for the job to complete and then exit
         job.waitForCompletion(true);
     }
 }
