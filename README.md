@@ -2,7 +2,7 @@
 Recommendation engine using the item-based collaborative filtering technique built on top of Hadoop Distributed File System and MapReduce to recommend movies with a repository of Netflix movie rating data.
 
 ## Background
-The whole system runs on a cluster of AWS EC2 instances with the SunU-Hadoop-Image v1.3 AMI, where it is configured with 1 master node and 5 slave nodes, all of which uses the `t2.large` instance type.
+The whole system runs on a cluster of AWS EC2 instances with the `SunU-Hadoop-Image v1.3 AMI``, where it is configured with 1 master node and 5 slave nodes, all of which uses the `t2.large` instance type.
 
 ### MapReduce Flow
 The flow of task orchestrating follows the flow below:
@@ -36,7 +36,17 @@ Key: (MovieTitle, MovieTitle) \
 Pair: SimilarityScore \
 _Eg. (Character, Captain Blood) = 0.2121_
 
-## Data 
+## How to run?
+1. Ensure you have configured EC2 clusters accordingly with MapReduce and HDFS.
+2. Download the data following [follow here](#data)
+3. Follow the file structure [follow here](#file-structure)
+4. run chmod to execute the scripts
+```bash
+chmod +x scripts/*
+```
+
+
+### Data 
 The original dataset comes from Netflix Kaggle Competition Page [[Click Here](https://www.kaggle.com/datasets/netflix-inc/netflix-prize-data)]
 ```
 |-- data
@@ -79,7 +89,7 @@ Here is the link to the S3 bucket to directly download the cleaned dataset
 The data cleaning can only be done on a local instance without MapReduce due to the format and structure of `combined_data_*.txt` file. 
 Preferably perform it with `instances type of (t2.xlarge)` with the EBS volume size set to at least `(20 GiB)`.
 
-## File Structure
+### File Structure
 Below is the structure used in organising files in both the HDFS and Local Linux Directory.
 
 Directory Structure (Local):

@@ -13,7 +13,7 @@ fi
 hadoop fs -rm -r results/java_py_mapreduce
 
 # Check directory -> Java src
-directory="/home/hadoop/recommendation-system/src/java_mapreduce"
+directory="./src/java_mapreduce"
 if [[ $(pwd) != directory ]]; then
     cd $directory
     echo "Switch directory to $directory"
@@ -54,7 +54,7 @@ if [[ $? -ne 0 ]]; then
 fi
 
 # Check directory -> Python src
-directory="/home/hadoop/recommendation-system/src/py_mapreduce"
+directory="./src/py_mapreduce"
 if [[ $(pwd) != directory ]]; then
     cd $directory
     echo "Switch directory to $directory"

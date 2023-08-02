@@ -9,11 +9,12 @@ output_data="hdfs:///user/hadoop/results/py_mrjob/output"
 hadoop fs -ls /
 if [[ $? -ne 0 ]]; then
     echo "HDFS connection failed. Exiting..."
+    exit
 fi
 hadoop fs -rm -r results/py_mrjob
 
 # Check and Change directory
-directory="/home/hadoop/recommendation-system/src/py_mrjob"
+directory="./src/py_mrjob"
 if [[ $(pwd) != directory ]]; then
     cd $directory  
     echo "Switch directory to $directory"

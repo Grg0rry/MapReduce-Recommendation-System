@@ -13,7 +13,7 @@ fi
 hadoop fs -rm -r results/java_mapreduce
 
 # Check and Change directory
-directory="/home/hadoop/recommendation-system/src/java_mapreduce"
+directory="./src/java_mapreduce"
 if [[ $(pwd) != directory ]]; then
     cd $directory
     echo "Switch directory to $directory"
