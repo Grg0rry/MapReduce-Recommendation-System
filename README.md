@@ -38,8 +38,8 @@ _Eg. (Character, Captain Blood) = 0.2121_
 
 ## How to run?
 1. Ensure you have configured EC2 clusters accordingly with MapReduce and HDFS.
-2. Download the data following [follow here](#data)
-3. Follow the file structure [follow here](#file-structure)
+2. Download the data following [[follow here](#data)]
+3. Follow the file structure [[follow here](#file-structure)]
 4. run chmod to execute the scripts
 ```bash
 chmod +x scripts/*
