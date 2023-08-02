@@ -45,7 +45,7 @@ _Eg. (Character, Captain Blood) = 0.2121_
 chmod +x scripts/*
 ```
 
-
+---
 ### Data 
 The original dataset comes from Netflix Kaggle Competition Page [[Click Here](https://www.kaggle.com/datasets/netflix-inc/netflix-prize-data)]
 ```
@@ -89,6 +89,7 @@ Here is the link to the S3 bucket to directly download the cleaned dataset
 The data cleaning can only be done on a local instance without MapReduce due to the format and structure of `combined_data_*.txt` file. 
 Preferably perform it with `instances type of (t2.xlarge)` with the EBS volume size set to at least `(20 GiB)`.
 
+---
 ### File Structure
 Below is the structure used in organising files in both the HDFS and Local Linux Directory.
 
