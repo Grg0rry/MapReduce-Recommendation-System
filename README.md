@@ -2,7 +2,7 @@
 Recommendation engine using the item-based collaborative filtering technique built on top of Hadoop Distributed File System and MapReduce to recommend movies with a repository of Netflix movie rating data.
 
 ## Background
-The whole system runs on a cluster of AWS EC2 instances with the `SunU-Hadoop-Image v1.3 AMI``, where it is configured with 1 master node and 5 slave nodes, all of which uses the `t2.large` instance type.
+The whole system runs on a cluster of AWS EC2 instances with the `SunU-Hadoop-Image v1.3 AMI`, where it is configured with 1 master node and 5 slave nodes, all of which uses the `t2.large` instance type.
 
 ### MapReduce Flow
 The flow of task orchestrating follows the flow below:
