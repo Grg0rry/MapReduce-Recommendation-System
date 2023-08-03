@@ -38,9 +38,18 @@ _Eg. (Character, Captain Blood) = 0.2121_
 
 ## How to run?
 1. Ensure you have configured EC2 clusters accordingly with MapReduce and HDFS.
-2. Download the data following [[follow here](#data)]
-3. Follow the file structure [[follow here](#file-structure)]
-4. run chmod to execute the scripts
+2. Clone the repository in the master node
+```
+git clone "https://github.com/Grg0rry/MapReduce-Recommendation-System"
+```
+3. Download the dataset [[follow here](#data)]
+4. Upload the data to HDFS
+```
+hadoop fs -put data/cleaned_moviesTitles.csv netflix_data/
+hadoop fs -put data/sample netflix_data/
+```
+5. **IMPORTANT** Follow the file structure [[follow here](#file-structure)]
+6. run chmod to execute the scripts
 ```bash
 chmod +x scripts/*
 ```
@@ -68,7 +77,7 @@ Data Cleaning was done using the `script/processing.sh` script to merge and aggr
 |   |-- sample
 |   |-- ...
 ```
-For the sample, it is obtained by running 
+_For the sample, it is obtained by running _
 ```bash
 split -b 500M data/cleaned_moviesTitles.csv sample
 ```
@@ -79,11 +88,9 @@ To directly access the cleaned dataset
 2. Access through AWS-CLI
 ```
 aws s3 ls s3://public-netflix-data-store/data
-```
-```
+
 aws s3 sync s3://public-netflix-data-store/data/* <local-folder>
 ```
-Here is the link to the S3 bucket to directly download the cleaned dataset 
 
 **Note:** \
 The data cleaning can only be done on a local instance without MapReduce due to the format and structure of `combined_data_*.txt` file. 
