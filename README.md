@@ -38,6 +38,16 @@ _Eg. (Character, Captain Blood) = 0.2121_
 
 ## How to run?
 1. Ensure you have configured EC2 clusters accordingly with MapReduce and HDFS.
+```
+# check if its empty
+hadoop fs -ls /
+
+# create the directories
+hadoop fs -mkdir /user
+hadoop fs -mkdir /user/hadoop
+hadoop fs -mkdir /user/hadoop/netflix_data
+hadoop fs -mkdir /user/hadoop/results
+```
 2. Clone the repository in the master node
 ```
 git clone "https://github.com/Grg0rry/MapReduce-Recommendation-System"
@@ -48,10 +58,16 @@ git clone "https://github.com/Grg0rry/MapReduce-Recommendation-System"
 hadoop fs -put data/cleaned_moviesTitles.csv netflix_data/
 hadoop fs -put data/sample netflix_data/
 ```
-5. **IMPORTANT** Follow the file structure [[follow here](#file-structure)]
-6. run chmod to execute the scripts
-```bash
-chmod +x scripts/*
+**IMPORTANT** Double check if it follow the file structure [[follow here](#file-structure)] \
+(_Proceed only if the file structure matches_)
+
+1. run chmod to make the scripts executable
+```
+chmod +x script/*
+```
+2. execute the script
+```
+script/<script-file.sh>
 ```
 
 ---
