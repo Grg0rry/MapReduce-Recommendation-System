@@ -170,4 +170,3 @@ Directory Structure (HDFS):
     |-- java_mapreduce
     `-- java_py_mapreduce
 ```
-
